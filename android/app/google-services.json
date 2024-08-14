@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "375392958324",
+    "project_id": "abrar-shop",
+    "storage_bucket": "abrar-shop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375392958324:android:e097612a1aa8140b2d1e21",
+        "android_client_info": {
+          "package_name": "com.sofolit.abara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR7vCll2HI0nxCBhgYlb17GRL0-BR9gsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375392958324:android:b5126985fa1daf492d1e21",
+        "android_client_info": {
+          "package_name": "com.sofolit.abrar_shop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR7vCll2HI0nxCBhgYlb17GRL0-BR9gsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
