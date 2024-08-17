@@ -21,12 +21,21 @@ class _ImageSectionState extends State<ImageSection> {
         alignment: Alignment.bottomCenter,
         children: [
           //
-          Image.network(
-            widget.images.isEmpty
-                ? 'https://firebasestorage.googleapis.com/v0/b/abrar-shop.appspot.com/o/placeholder.png?alt=media&token=dc5ea06a-d65d-4689-9196-329781aef7d6'
-                : widget.images[selectedImage],
-            fit: BoxFit.cover,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent.shade100.withOpacity(.5),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(widget.images[selectedImage]),
+              ),
+            ),
           ),
+          // Image.network(
+          //   widget.images.isEmpty
+          //       ? 'https://firebasestorage.googleapis.com/v0/b/abrar-shop.appspot.com/o/placeholder.png?alt=media&token=dc5ea06a-d65d-4689-9196-329781aef7d6'
+          //       : widget.images[selectedImage],
+          //   fit: BoxFit.cover,
+          // ),
 
           //
           Container(

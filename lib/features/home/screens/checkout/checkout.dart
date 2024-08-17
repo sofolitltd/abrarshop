@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '/features/home/screens/checkout/payment_success.dart';
+import '../../controllers/address_controller.dart';
 import '../../controllers/cart_controller.dart';
 
 class CheckOut extends StatelessWidget {
@@ -11,6 +12,8 @@ class CheckOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(CartController());
+    final addressController = Get.put(AddressController());
+
     double deliveryCharge = 50;
 
     return Scaffold(
@@ -318,62 +321,75 @@ class CheckOut extends StatelessWidget {
                 const Divider(thickness: .5),
 
                 // address
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Obx(
+                  () {
+                    final selectedAddress =
+                        AddressController.instance.selectedAddress.value;
+
+                    //
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Shipping Address',
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Shipping Address',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),
+                            ),
+
+                            //
+                            TextButton(
+                              onPressed: () {
+                                addressController.showAddressBottomSheet();
+                              },
+                              child: Text(
+                                'Change',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Change',
-                            style: Theme.of(context).textTheme.bodyMedium,
+
+                        // Name
+                        Text(
+                          selectedAddress?.name ?? 'No Address',
+                          // Display "No Address" if null
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Call
+                        if (selectedAddress !=
+                            null) // Only show call details if an address is selected
+                          Row(
+                            children: [
+                              const Icon(Iconsax.call, size: 16),
+                              const SizedBox(width: 12),
+                              Text(selectedAddress.mobile),
+                            ],
                           ),
-                        ),
+
+                        // Location
+                        if (selectedAddress !=
+                            null) // Only show location details if an address is selected
+                          Row(
+                            children: [
+                              const Icon(Iconsax.location, size: 16),
+                              const SizedBox(width: 12),
+                              Text(selectedAddress.address),
+                            ],
+                          ),
                       ],
-                    ),
-
-                    // name
-                    Text('Name',
-                        style: Theme.of(context).textTheme.titleMedium),
-
-                    const SizedBox(height: 8),
-
-                    // call
-                    const Row(
-                      children: [
-                        Icon(
-                          Iconsax.call,
-                          size: 16,
-                        ),
-                        SizedBox(width: 12),
-                        Text('01704340860'),
-                      ],
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // location
-                    const Row(
-                      children: [
-                        Icon(
-                          Iconsax.location,
-                          size: 16,
-                        ),
-                        SizedBox(width: 12),
-                        Text('190/2, Purbo shalbon , Rangpur'),
-                      ],
-                    ),
-                  ],
+                    );
+                  },
                 )
               ],
             ),

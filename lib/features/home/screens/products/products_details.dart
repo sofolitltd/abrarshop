@@ -74,13 +74,12 @@ class ProductsDetails extends StatelessWidget {
             //
             ImageSection(images: product.images),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
 
             //
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(16),
-              height: MediaQuery.sizeOf(context).height - 400,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -256,17 +255,14 @@ class ProductsDetails extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 24),
-
-                  // add to cart
-                  CartSection(product: product),
-
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
           ],
         ),
       ),
+
+      bottomNavigationBar: CartSection(product: product),
     );
   }
 }

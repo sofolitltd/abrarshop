@@ -1,5 +1,5 @@
-import 'package:abrar_shop/features/home/screens/search.dart';
-import 'package:abrar_shop/utils/shimmer/popular_product_shimmer.dart';
+import 'package:abrar_shop/features/home/screens/categories/all_categories.dart';
+import 'package:abrar_shop/features/home/screens/products/featured_products.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,8 +7,10 @@ import 'package:iconsax/iconsax.dart';
 import '/features/home/controllers/product_controller.dart';
 import '/features/home/screens/categories/featured_category_details.dart';
 import '/features/home/screens/products/products_details.dart';
+import '/features/home/screens/search.dart';
 import '/utils/constants/constants.dart';
 import '/utils/shimmer/featured_category_shimmer.dart';
+import '/utils/shimmer/popular_product_shimmer.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/category_controller.dart';
 import '../models/cart_model.dart';
@@ -31,8 +33,6 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         surfaceTintColor: Colors.transparent,
-
-        // elevation: 1,
         title: const Text.rich(
           TextSpan(
               text: 'Abrar',
@@ -133,13 +133,33 @@ class Home extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Featured Categories',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.ideographic,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //
+                      Text(
+                        'Featured Categories',
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                      ),
+
+                      //
+                      TextButton(
+                        onPressed: () {
+                          Get.to(() => const AllCategories());
+                        },
+                        child: const Text(
+                          'See More',
+                          style: TextStyle(color: Colors.white),
                         ),
+                      ),
+                    ],
                   ),
 
                   const SizedBox(height: 16),
@@ -158,12 +178,12 @@ class Home extends StatelessWidget {
 
                     // ui
                     return SizedBox(
-                      height: 88,
+                      height: 96,
                       child: ListView.separated(
                         itemCount: categoryController.featuredCategories.length,
                         scrollDirection: Axis.horizontal,
                         separatorBuilder: (context, index) =>
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 8),
                         itemBuilder: (context, index) {
                           // category
                           final category =
@@ -179,44 +199,51 @@ class Home extends StatelessWidget {
                                 transition: Transition.noTransition,
                               );
                             },
-                            child: SizedBox(
-                              width: 72,
-                              child: Column(
-                                children: [
-                                  // image
-                                  Container(
-                                    height: 56,
-                                    width: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Colors.blueAccent.shade100
-                                          .withOpacity(.5),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(category.imageUrl),
-                                      ),
+                            child: Column(
+                              children: [
+                                // image
+                                Container(
+                                  height: 64,
+                                  width: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(32),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: .5,
+                                    ),
+                                    color: Colors.blueAccent.shade100
+                                        .withOpacity(.5),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(category.imageUrl),
                                     ),
                                   ),
+                                ),
 
-                                  const SizedBox(height: 8),
+                                const SizedBox(height: 8),
 
-                                  // name
-                                  Text(
-                                    category.name,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(
-                                          height: 1.3,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                // name
+                                SizedBox(
+                                  width: 72,
+                                  height: 24,
+                                  child: Center(
+                                    child: Text(
+                                      category.name,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            height: 1.2,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -280,7 +307,13 @@ class Home extends StatelessWidget {
 
                           //2
                           TextButton(
-                              onPressed: () {}, child: const Text('See More'))
+                              onPressed: () {
+                                Get.to(
+                                  () => const FeaturedProducts(),
+                                  transition: Transition.noTransition,
+                                );
+                              },
+                              child: const Text('See More'))
                         ],
                       ),
 
@@ -311,7 +344,7 @@ class Home extends StatelessWidget {
                               crossAxisCount: 2,
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16,
-                              childAspectRatio: .7,
+                              childAspectRatio: .65,
                             ),
                             itemCount:
                                 productController.featuredProducts.length,
@@ -366,18 +399,22 @@ class Home extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             //
-                                            Text(
-                                              product.name,
-                                              textAlign: TextAlign.start,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium!
-                                                  .copyWith(
-                                                    height: 1.3,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            SizedBox(
+                                              height: 40,
+                                              child: Text(
+                                                product.name,
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium!
+                                                    .copyWith(
+                                                      height: 1.3,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
                                             ),
 
                                             const SizedBox(height: 8),

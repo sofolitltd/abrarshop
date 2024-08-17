@@ -53,10 +53,18 @@ class Cart extends StatelessWidget {
                   //
                   ElevatedButton.icon(
                     onPressed: () {
-                      Get.offAll(() => const NavigationMenu());
+                      NavigatorController navigatorController =
+                          Get.find<NavigatorController>();
+                      if (Get.currentRoute == '/menu') {
+                        // Set the selected index to 0 (Home)
+                        navigatorController.selectedIndex.value = 1;
+                      } else {
+                        (Get.offAll(() => const NavigationMenu()));
+                        navigatorController.selectedIndex.value = 1;
+                      }
                     },
                     icon: const Icon(
-                      Iconsax.home,
+                      Iconsax.shop,
                       size: 16,
                     ),
                     label: const Text('Continue Shopping'),
@@ -160,38 +168,40 @@ class Cart extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 //
-                                Row(
-                                  textBaseline: TextBaseline.ideographic,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  children: [
-                                    Text(
-                                      (cartItem.price * cartItem.quantity)
-                                          .toStringAsFixed(0),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
+                                Expanded(
+                                  child: Row(
+                                    textBaseline: TextBaseline.ideographic,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    children: [
+                                      Text(
+                                        (cartItem.price * cartItem.quantity)
+                                            .toStringAsFixed(0),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
 
-                                    const SizedBox(width: 4),
-                                    //
-                                    Text(
-                                      '(${cartItem.price.toStringAsFixed(0)} x ${cartItem.quantity})',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                            color: Colors.black54,
-                                          ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 4),
+                                      //
+                                      Text(
+                                        '(${cartItem.price.toStringAsFixed(0)} x ${cartItem.quantity})',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Colors.black54,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
-                                const SizedBox(width: 24),
+                                const SizedBox(width: 8),
 
                                 //
                                 Row(
@@ -269,39 +279,44 @@ class Cart extends StatelessWidget {
         },
       ),
       // Checkout button with grand total
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            //
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total Item: ${cartController.totalQuantity}',
+      bottomNavigationBar: Obx(
+        () => Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              //
+              if (cartController.cartItems.isNotEmpty) ...[
+                //
+                Obx(
+                  () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total Item: ${cartController.totalQuantity}',
+                        ),
+                        Text(
+                          'Total Price: $kTkSymbol ${cartController.totalPrice.toStringAsFixed(0)}',
+                        ),
+                      ]),
                 ),
-                Text(
-                  'Total Price: $kTkSymbol ${cartController.totalPrice.toStringAsFixed(0)}',
+
+                const SizedBox(height: 8),
+
+                //
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(
+                      const CheckOut(),
+                      transition: Transition.noTransition,
+                    );
+                  },
+                  child: const Text('Checkout'),
                 ),
               ],
-            ),
-
-            const SizedBox(height: 8),
-
-            //
-            ElevatedButton(
-              onPressed: () {
-                Get.to(
-                  const CheckOut(),
-                  transition: Transition.noTransition,
-                );
-              },
-              child: const Text('Checkout'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

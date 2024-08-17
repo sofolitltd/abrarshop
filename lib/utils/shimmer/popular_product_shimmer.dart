@@ -16,7 +16,7 @@ class PopularProductShimmer extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: .7,
+        childAspectRatio: .65,
       ),
       itemCount: 4,
       itemBuilder: (context, index) {

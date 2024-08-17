@@ -26,7 +26,7 @@ class CategoryModel {
       final data = document.data()!;
       //
       return CategoryModel(
-        id: document.id,
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         imageUrl: data['imageUrl'] ?? '',
         parentId: data['parentId'] ?? '',
@@ -35,6 +35,20 @@ class CategoryModel {
     } else {
       return CategoryModel.empty();
     }
+  }
+
+  /// from data
+  factory CategoryModel.fromQuerySnapshot(
+      QueryDocumentSnapshot<Object?> document) {
+    final data = document.data() as Map<String, dynamic>;
+    //
+    return CategoryModel(
+      id: document.id,
+      name: data['name'] ?? '',
+      imageUrl: data['imageUrl'] ?? '',
+      parentId: data['parentId'] ?? '',
+      isFeatured: data['isFeatured'] ?? false,
+    );
   }
 
   /// to data

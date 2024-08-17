@@ -1,8 +1,11 @@
+import 'package:abrar_shop/features/home/screens/products/all_products.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '/features/home/screens/home.dart';
+import 'features/home/screens/cart/cart.dart';
+import 'features/home/screens/profile/profile.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
@@ -24,7 +27,8 @@ class NavigationMenu extends StatelessWidget {
           destinations: const [
             NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
             NavigationDestination(icon: Icon(Iconsax.shop), label: 'Shop'),
-            NavigationDestination(icon: Icon(Iconsax.heart), label: 'WishList'),
+            NavigationDestination(
+                icon: Icon(Iconsax.shopping_bag), label: 'Cart'),
             NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
           ],
         ),
@@ -43,9 +47,8 @@ class NavigatorController extends GetxController {
   //
   final screens = [
     const Home(),
-    // const Cart(),
-    Container(color: Colors.red),
-    Container(color: Colors.red),
-    Container(color: Colors.green),
+    const AllProducts(),
+    const Cart(),
+    const Profile(),
   ];
 }

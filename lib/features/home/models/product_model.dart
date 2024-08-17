@@ -66,6 +66,26 @@ class ProductModel {
     }
   }
 
+  /// from data
+  factory ProductModel.fromQuerySnapshot(
+      QueryDocumentSnapshot<Object?> document) {
+    final data = document.data() as Map<String, dynamic>;
+    //
+    return ProductModel(
+      id: data['id'] ?? '',
+      sku: data['sku'] ?? '',
+      name: data['name'] ?? '',
+      description: data['description'] ?? '',
+      regularPrice: data['regularPrice'].toDouble() ?? 0,
+      salePrice: data['salePrice'].toDouble() ?? 0,
+      stockQuantity: data['stockQuantity'] ?? 0,
+      images: List<String>.from(data['images'] ?? []),
+      categoryId: data['categoryId'] ?? '',
+      brandId: data['brandId'] ?? '',
+      isFeatured: data['isFeatured'] ?? false,
+    );
+  }
+
   /// to data
   Map<String, dynamic> toJson() {
     return {

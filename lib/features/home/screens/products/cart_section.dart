@@ -26,83 +26,85 @@ class CartSection extends StatelessWidget {
       quantity: 1,
     );
 
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // add to cart (if already not in cart)
-              int index = cartController.cartItems.indexWhere(
-                  (cartItemInCart) => cartItemInCart.id == cartItem.id);
-              if (index == -1) {
-                // Item not in cart, add it and navigate
-                cartController.addToCart(cartItem);
-              }
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // add to cart (if already not in cart)
+                int index = cartController.cartItems.indexWhere(
+                    (cartItemInCart) => cartItemInCart.id == cartItem.id);
+                if (index == -1) {
+                  // Item not in cart, add it and navigate
+                  cartController.addToCart(cartItem);
+                }
 
-              //
-              Get.to(
-                () => const Cart(),
-                transition: Transition.rightToLeft,
-              );
-            },
-            icon: const Icon(
-              Iconsax.book,
-              size: 16,
-            ),
-            label: Text(
-              'Buy Now'.toUpperCase(),
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 16),
-
-        //
-        Expanded(
-          flex: 3,
-          child: OutlinedButton.icon(
-            onPressed: () {
-              // add to cart (if already not in cart)
-              int index = cartController.cartItems.indexWhere(
-                  (cartItemInCart) => cartItemInCart.id == cartItem.id);
-              if (index == -1) {
-                // Item not in cart, add it and navigate
-                cartController.addToCart(cartItem);
                 //
-                Get.snackbar(
-                  "Item Added",
-                  "${cartItem.name} added to cart",
-                  snackPosition: SnackPosition.BOTTOM,
-                  margin: const EdgeInsets.all(16),
-                  backgroundColor: Colors.blueAccent,
-                  colorText: Colors.white,
-                  duration: const Duration(seconds: 1),
+                Get.to(
+                  () => const Cart(),
+                  transition: Transition.rightToLeft,
                 );
-              } else {
-                Get.snackbar(
-                  "Already Added",
-                  "${cartItem.name} already in cart",
-                  snackPosition: SnackPosition.BOTTOM,
-                  colorText: Colors.white,
-                  backgroundColor: Colors.red,
-                  margin: const EdgeInsets.all(16),
-                  duration: const Duration(seconds: 1),
-                );
-              }
-
-              //
-            },
-            icon: const Icon(
-              Iconsax.shopping_bag,
-              size: 16,
-            ),
-            label: Text(
-              'Add To Cart'.toUpperCase(),
+              },
+              icon: const Icon(
+                Iconsax.book,
+                size: 16,
+              ),
+              label: Text(
+                'Buy Now'.toUpperCase(),
+              ),
             ),
           ),
-        ),
-      ],
+
+          const SizedBox(width: 16),
+
+          //
+          Expanded(
+            flex: 3,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                // add to cart (if already not in cart)
+                int index = cartController.cartItems.indexWhere(
+                    (cartItemInCart) => cartItemInCart.id == cartItem.id);
+                if (index == -1) {
+                  // Item not in cart, add it and navigate
+                  cartController.addToCart(cartItem);
+                  //
+                  Get.snackbar(
+                    "Item Added",
+                    "${cartItem.name} added to cart",
+                    snackPosition: SnackPosition.BOTTOM,
+                    margin: const EdgeInsets.all(16),
+                    duration: const Duration(seconds: 1),
+                  );
+                } else {
+                  Get.snackbar(
+                    "Already Added",
+                    "${cartItem.name} already in cart",
+                    snackPosition: SnackPosition.BOTTOM,
+                    colorText: Colors.white,
+                    backgroundColor: Colors.red,
+                    margin: const EdgeInsets.all(16),
+                    duration: const Duration(seconds: 1),
+                  );
+                }
+
+                //
+              },
+              icon: const Icon(
+                Iconsax.shopping_bag,
+                size: 16,
+              ),
+              label: Text(
+                'Add To Cart'.toUpperCase(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
