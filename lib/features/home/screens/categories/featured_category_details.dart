@@ -1,11 +1,11 @@
-import 'package:abrar_shop/features/home/controllers/cart_controller.dart';
-import 'package:abrar_shop/features/home/models/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../utils/constants/constants.dart';
-import '../../../../utils/shimmer/popular_product_shimmer.dart';
+import '/features/home/controllers/cart_controller.dart';
+import '/features/home/models/category_model.dart';
+import '/utils/constants/constants.dart';
+import '/utils/shimmer/popular_product_shimmer.dart';
 import '../../controllers/product_controller.dart';
 import '../../models/cart_model.dart';
 import '../cart/cart.dart';
@@ -13,9 +13,11 @@ import '../products/products_details.dart';
 
 class FeaturedCategoryDetails extends StatelessWidget {
   final CategoryModel category;
+  final bool isSubCategory;
   const FeaturedCategoryDetails({
     super.key,
     required this.category,
+    required this.isSubCategory,
   });
 
   @override
@@ -23,9 +25,15 @@ class FeaturedCategoryDetails extends StatelessWidget {
     final cartController = Get.put(CartController());
 
     final productController = Get.put(ProductController());
-    productController.getCategoryProduct(category.id);
-    productController.setCategoryProducts(
-        'Name', productController.categoryProducts);
+    if (isSubCategory) {
+      productController.getSubCategoryProduct(category.id);
+      productController.setCategoryProducts(
+          'Name', productController.subCategoryProducts);
+    } else {
+      productController.getCategoryProduct(category.id);
+      productController.setCategoryProducts(
+          'Name', productController.categoryProducts);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -135,7 +143,7 @@ class FeaturedCategoryDetails extends StatelessWidget {
 
               // if featured category empty
               if (productController.categoryProducts.isEmpty) {
-                return const Text('No data found');
+                return const Center(child: Text('No data found'));
               }
 
               // ui

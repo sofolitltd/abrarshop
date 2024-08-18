@@ -14,6 +14,7 @@ class ProductController extends GetxController {
   RxList<ProductModel> allFeaturedProducts = <ProductModel>[].obs;
 
   RxList<ProductModel> categoryProducts = <ProductModel>[].obs;
+  RxList<ProductModel> subCategoryProducts = <ProductModel>[].obs;
 
   final RxString selectedSortOption = 'Name'.obs;
   final RxString selectedFeaturedSortOption = 'Name'.obs;
@@ -64,7 +65,20 @@ class ProductController extends GetxController {
       return categoryProducts;
     } catch (e) {
       throw "Product | catch : $e";
-      return [];
+    }
+  }
+
+  //
+  Future<List<ProductModel>> getSubCategoryProduct(String subCategoryId) async {
+    try {
+      subCategoryProducts.assignAll(
+        allProducts
+            .where((product) => product.subCategoryId == subCategoryId)
+            .toList(),
+      );
+      return subCategoryProducts;
+    } catch (e) {
+      throw "Product | catch : $e";
     }
   }
 
@@ -144,6 +158,33 @@ class ProductController extends GetxController {
       }
 
       categoryProducts.assignAll(sortedProducts); // Update the observable list
+    }
+  }
+
+  //
+  void setSubCategoryProducts(String setOption, List<ProductModel> products) {
+    selectedCategorySortOption.value = setOption;
+
+    // Sort only if the product list is not empty
+    if (products.isNotEmpty) {
+      List<ProductModel> sortedProducts = List.from(products); // Create a copy
+
+      switch (setOption) {
+        case 'Name':
+          sortedProducts.sort((a, b) => a.name.compareTo(b.name));
+          break;
+        case 'Low to High':
+          sortedProducts.sort((a, b) => a.salePrice.compareTo(b.salePrice));
+          break;
+        case 'High to Low':
+          sortedProducts.sort((a, b) => b.salePrice.compareTo(a.salePrice));
+          break;
+        default:
+          sortedProducts.sort((a, b) => a.name.compareTo(b.name));
+      }
+
+      subCategoryProducts
+          .assignAll(sortedProducts); // Update the observable list
     }
   }
 }

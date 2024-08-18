@@ -194,8 +194,10 @@ class Home extends StatelessWidget {
                             onTap: () {
                               // featured category details
                               Get.to(
-                                () =>
-                                    FeaturedCategoryDetails(category: category),
+                                () => FeaturedCategoryDetails(
+                                  category: category,
+                                  isSubCategory: false,
+                                ),
                                 transition: Transition.noTransition,
                               );
                             },

@@ -10,6 +10,7 @@ class ProductModel {
   int stockQuantity;
   List<String> images;
   String categoryId;
+  String subCategoryId;
   String brandId;
   bool isFeatured;
 
@@ -23,6 +24,7 @@ class ProductModel {
     required this.stockQuantity,
     required this.images,
     required this.categoryId,
+    required this.subCategoryId,
     required this.brandId,
     required this.isFeatured,
   });
@@ -38,6 +40,7 @@ class ProductModel {
         stockQuantity: 0,
         images: [],
         categoryId: '',
+        subCategoryId: '',
         brandId: '',
         isFeatured: false,
       );
@@ -58,6 +61,7 @@ class ProductModel {
         stockQuantity: data['stockQuantity'] ?? 0,
         images: List<String>.from(data['images'] ?? []),
         categoryId: data['categoryId'] ?? '',
+        subCategoryId: data['subCategoryId'] ?? '',
         brandId: data['brandId'] ?? '',
         isFeatured: data['isFeatured'] ?? false,
       );
@@ -81,6 +85,7 @@ class ProductModel {
       stockQuantity: data['stockQuantity'] ?? 0,
       images: List<String>.from(data['images'] ?? []),
       categoryId: data['categoryId'] ?? '',
+      subCategoryId: data['subCategoryId'] ?? '',
       brandId: data['brandId'] ?? '',
       isFeatured: data['isFeatured'] ?? false,
     );
@@ -98,6 +103,7 @@ class ProductModel {
       'stockQuantity': stockQuantity,
       'images': images,
       'categoryId': categoryId,
+      'subCategoryId': subCategoryId,
       'brandId': brandId,
       'isFeatured': isFeatured,
     };

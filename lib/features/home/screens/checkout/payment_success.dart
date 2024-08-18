@@ -1,3 +1,4 @@
+import 'package:abrar_shop/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -51,7 +52,7 @@ class PaymentSuccess extends StatelessWidget {
 
                   ElevatedButton(
                       onPressed: () {
-                        Get.back();
+                        Get.offAll(() => const NavigationMenu());
                       },
                       child: const Text('Continue Shopping'))
                 ],

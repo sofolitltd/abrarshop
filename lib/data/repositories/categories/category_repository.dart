@@ -12,7 +12,7 @@ class CategoryRepository extends GetxController {
   /// get all categories
   Future<List<CategoryModel>> getAllCategories() async {
     try {
-      final snapshot = await _db.collection('categories').get();
+      final snapshot = await _db.collection('categories').orderBy('name').get();
       final list = snapshot.docs
           .map((document) => CategoryModel.fromJson(document))
           .toList();
