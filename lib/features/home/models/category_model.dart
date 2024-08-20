@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CategoryModel {
   String id;
   String name;
+  String slug;
   String imageUrl;
   String parentId;
   bool isFeatured;
@@ -10,14 +11,20 @@ class CategoryModel {
   CategoryModel({
     required this.id,
     required this.name,
+    required this.slug,
     required this.imageUrl,
-    this.parentId = '',
+    required this.parentId,
     required this.isFeatured,
   });
 
   /// empty
-  static CategoryModel empty() =>
-      CategoryModel(id: '', name: '', imageUrl: '', isFeatured: false);
+  static CategoryModel empty() => CategoryModel(
+      id: '',
+      name: '',
+      slug: '',
+      imageUrl: '',
+      parentId: '',
+      isFeatured: false);
 
   /// from data
   factory CategoryModel.fromJson(
@@ -28,6 +35,7 @@ class CategoryModel {
       return CategoryModel(
         id: data['id'] ?? '',
         name: data['name'] ?? '',
+        slug: data['slug'] ?? '',
         imageUrl: data['imageUrl'] ?? '',
         parentId: data['parentId'] ?? '',
         isFeatured: data['isFeatured'] ?? false,
@@ -38,13 +46,12 @@ class CategoryModel {
   }
 
   /// from data
-  factory CategoryModel.fromQuerySnapshot(
-      QueryDocumentSnapshot<Object?> document) {
-    final data = document.data() as Map<String, dynamic>;
+  factory CategoryModel.fromQuerySnapshot(data) {
     //
     return CategoryModel(
-      id: document.id,
+      id: data['id'] ?? '',
       name: data['name'] ?? '',
+      slug: data['slug'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
       parentId: data['parentId'] ?? '',
       isFeatured: data['isFeatured'] ?? false,
@@ -56,6 +63,7 @@ class CategoryModel {
     return {
       'id': id,
       'name': name,
+      'slug': slug,
       'imageUrl': imageUrl,
       'parentId': parentId,
       'isFeatured': isFeatured,

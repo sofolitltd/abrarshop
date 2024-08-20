@@ -24,20 +24,4 @@ class CategoryRepository extends GetxController {
       throw 'Something wrong: $e';
     }
   }
-
-  //
-  Future<List<CategoryModel>> getCategoriesByQuery(Query query) async {
-    try {
-      final querySnapshot = await query.get();
-      final List<CategoryModel> categories = querySnapshot.docs
-          .map((doc) => CategoryModel.fromQuerySnapshot(doc))
-          .toList();
-      return categories;
-    } on FirebaseException catch (e) {
-      throw 'Firebase error: $e';
-    } catch (e) {
-      //
-      throw 'Something wrong: $e';
-    }
-  }
 }

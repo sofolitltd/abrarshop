@@ -19,6 +19,7 @@ class ProductController extends GetxController {
   final RxString selectedSortOption = 'Name'.obs;
   final RxString selectedFeaturedSortOption = 'Name'.obs;
   final RxString selectedCategorySortOption = 'Name'.obs;
+  final RxString selectedSubCategorySortOption = 'Name'.obs;
 
   @override
   void onInit() {
@@ -58,9 +59,7 @@ class ProductController extends GetxController {
   Future<List<ProductModel>> getCategoryProduct(String categoryId) async {
     try {
       categoryProducts.assignAll(
-        allProducts
-            .where((product) => product.categoryId == categoryId)
-            .toList(),
+        allProducts.where((product) => product.category == categoryId).toList(),
       );
       return categoryProducts;
     } catch (e) {
@@ -73,7 +72,7 @@ class ProductController extends GetxController {
     try {
       subCategoryProducts.assignAll(
         allProducts
-            .where((product) => product.subCategoryId == subCategoryId)
+            .where((product) => product.subCategory == subCategoryId)
             .toList(),
       );
       return subCategoryProducts;
@@ -100,6 +99,9 @@ class ProductController extends GetxController {
         case 'High to Low':
           sortedProducts.sort((a, b) => b.salePrice.compareTo(a.salePrice));
           break;
+        case 'Latest Items':
+          sortedProducts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
+          break;
         default:
           sortedProducts.sort((a, b) => a.name.compareTo(b.name));
       }
@@ -125,6 +127,9 @@ class ProductController extends GetxController {
           break;
         case 'High to Low':
           sortedProducts.sort((a, b) => b.salePrice.compareTo(a.salePrice));
+          break;
+        case 'Latest Items':
+          sortedProducts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
           break;
         default:
           sortedProducts.sort((a, b) => a.name.compareTo(b.name));
@@ -153,6 +158,9 @@ class ProductController extends GetxController {
         case 'High to Low':
           sortedProducts.sort((a, b) => b.salePrice.compareTo(a.salePrice));
           break;
+        case 'Latest Items':
+          sortedProducts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
+          break;
         default:
           sortedProducts.sort((a, b) => a.name.compareTo(b.name));
       }
@@ -163,7 +171,7 @@ class ProductController extends GetxController {
 
   //
   void setSubCategoryProducts(String setOption, List<ProductModel> products) {
-    selectedCategorySortOption.value = setOption;
+    selectedSubCategorySortOption.value = setOption;
 
     // Sort only if the product list is not empty
     if (products.isNotEmpty) {
@@ -178,6 +186,9 @@ class ProductController extends GetxController {
           break;
         case 'High to Low':
           sortedProducts.sort((a, b) => b.salePrice.compareTo(a.salePrice));
+          break;
+        case 'Latest Items':
+          sortedProducts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
           break;
         default:
           sortedProducts.sort((a, b) => a.name.compareTo(b.name));

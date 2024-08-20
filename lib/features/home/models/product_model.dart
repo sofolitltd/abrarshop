@@ -4,29 +4,33 @@ class ProductModel {
   String id;
   String sku;
   String name;
+  String slug;
   String description;
   double regularPrice;
   double salePrice;
-  int stockQuantity;
+  int stock;
   List<String> images;
-  String categoryId;
-  String subCategoryId;
-  String brandId;
+  String category;
+  String subCategory;
+  String brand;
   bool isFeatured;
+  Timestamp createdDate;
 
   ProductModel({
     required this.id,
     required this.sku,
     required this.name,
+    required this.slug,
     required this.description,
     required this.regularPrice,
     required this.salePrice,
-    required this.stockQuantity,
+    required this.stock,
     required this.images,
-    required this.categoryId,
-    required this.subCategoryId,
-    required this.brandId,
+    required this.category,
+    required this.subCategory,
+    required this.brand,
     required this.isFeatured,
+    required this.createdDate,
   });
 
   /// empty
@@ -34,15 +38,17 @@ class ProductModel {
         id: '',
         sku: '',
         name: '',
+        slug: '',
         description: '',
         regularPrice: 0,
         salePrice: 0,
-        stockQuantity: 0,
+        stock: 0,
         images: [],
-        categoryId: '',
-        subCategoryId: '',
-        brandId: '',
+        category: '',
+        subCategory: '',
+        brand: '',
         isFeatured: false,
+        createdDate: Timestamp.now(),
       );
 
   /// from data
@@ -55,15 +61,17 @@ class ProductModel {
         id: data['id'] ?? '',
         sku: data['sku'] ?? '',
         name: data['name'] ?? '',
+        slug: data['slug'] ?? '',
         description: data['description'] ?? '',
         regularPrice: data['regularPrice'].toDouble() ?? 0,
         salePrice: data['salePrice'].toDouble() ?? 0,
-        stockQuantity: data['stockQuantity'] ?? 0,
+        stock: data['stock'] ?? 0,
         images: List<String>.from(data['images'] ?? []),
-        categoryId: data['categoryId'] ?? '',
-        subCategoryId: data['subCategoryId'] ?? '',
-        brandId: data['brandId'] ?? '',
+        category: data['category'] ?? '',
+        subCategory: data['subCategory'] ?? '',
+        brand: data['brand'] ?? '',
         isFeatured: data['isFeatured'] ?? false,
+        createdDate: data['createdDate'] ?? Timestamp,
       );
     } else {
       return ProductModel.empty();
@@ -79,15 +87,17 @@ class ProductModel {
       id: data['id'] ?? '',
       sku: data['sku'] ?? '',
       name: data['name'] ?? '',
+      slug: data['slug'] ?? '',
       description: data['description'] ?? '',
       regularPrice: data['regularPrice'].toDouble() ?? 0,
       salePrice: data['salePrice'].toDouble() ?? 0,
-      stockQuantity: data['stockQuantity'] ?? 0,
+      stock: data['stock'] ?? 0,
       images: List<String>.from(data['images'] ?? []),
-      categoryId: data['categoryId'] ?? '',
-      subCategoryId: data['subCategoryId'] ?? '',
-      brandId: data['brandId'] ?? '',
+      category: data['category'] ?? '',
+      subCategory: data['subCategory'] ?? '',
+      brand: data['brand'] ?? '',
       isFeatured: data['isFeatured'] ?? false,
+      createdDate: data['createdDate'] ?? Timestamp,
     );
   }
 
@@ -97,15 +107,17 @@ class ProductModel {
       'id': id,
       'sku': sku,
       'name': name,
+      'slug': slug,
       'description': description,
       'regularPrice': regularPrice,
       'salePrice': salePrice,
-      'stockQuantity': stockQuantity,
+      'stock': stock,
       'images': images,
-      'categoryId': categoryId,
-      'subCategoryId': subCategoryId,
-      'brandId': brandId,
+      'category': category,
+      'subCategory': subCategory,
+      'brand': brand,
       'isFeatured': isFeatured,
+      'createdDate': createdDate,
     };
   }
 }

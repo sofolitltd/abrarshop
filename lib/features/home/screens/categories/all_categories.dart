@@ -18,10 +18,14 @@ class AllCategories extends StatelessWidget {
       ),
       body: Row(
         children: [
+          // category
           Container(
             color: Colors.black12.withOpacity(.05),
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            width: 110,
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 8,
+            ),
+            width: 120,
             child: Obx(
               () => ListView.builder(
                 itemCount: categoryController.allMainCategories.length,
@@ -31,21 +35,32 @@ class AllCategories extends StatelessWidget {
                   //
                   return InkWell(
                     onTap: () {
-                      categoryController.selectedCategory.value = category.id;
-                      categoryController.fetchSubCategories(category.id);
+                      categoryController.selectedCategory.value = category.name;
+                      categoryController.fetchSubCategories(category.name);
                     },
                     child: Obx(
                       // Wrap with Obx to rebuild when selectedCategory changes
                       () => Container(
-                        color: categoryController.selectedCategory.value ==
-                                category.id
-                            ? Colors.black12
-                            : Colors.transparent,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 16,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: categoryController.selectedCategory.value ==
+                                  category.name
+                              ? Colors.blueAccent
+                              : Colors.transparent,
                         ),
-                        child: Text(category.name),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 8,
+                        ),
+                        child: Text(
+                          category.name,
+                          style: TextStyle(
+                            color: categoryController.selectedCategory.value ==
+                                    category.name
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -54,7 +69,7 @@ class AllCategories extends StatelessWidget {
             ),
           ),
 
-          //
+          // sub category
           Expanded(
             child: Obx(
               () => categoryController.subCategories.isEmpty
@@ -64,8 +79,10 @@ class AllCategories extends StatelessWidget {
                       itemCount: categoryController.subCategories.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: .7,
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        childAspectRatio: 1,
                       ),
                       itemBuilder: (_, index) {
                         //
@@ -89,25 +106,27 @@ class AllCategories extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(color: Colors.black12),
                             ),
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(6),
                             child: Column(
                               children: [
                                 // image
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.circular(6),
                                       border: Border.all(
                                         color: Colors.white,
                                         width: .5,
                                       ),
                                       color: Colors.blueAccent.shade100
                                           .withOpacity(.5),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image:
-                                            NetworkImage(subCategory.imageUrl),
-                                      ),
+                                      image: subCategory.imageUrl.isNotEmpty
+                                          ? DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  subCategory.imageUrl),
+                                            )
+                                          : null,
                                     ),
                                   ),
                                 ),

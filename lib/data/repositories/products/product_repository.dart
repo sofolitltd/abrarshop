@@ -14,7 +14,10 @@ class ProductRepository extends GetxController {
   /// get all products
   Future<List<ProductModel>> getAllProducts() async {
     try {
-      final snapshot = await _db.collection('products').get();
+      final snapshot = await _db
+          .collection('products')
+          .orderBy('createdDate', descending: true)
+          .get();
       final productList = snapshot.docs
           .map((document) => ProductModel.fromJson(document))
           .toList();

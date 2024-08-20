@@ -26,13 +26,13 @@ class FeaturedCategoryDetails extends StatelessWidget {
 
     final productController = Get.put(ProductController());
     if (isSubCategory) {
-      productController.getSubCategoryProduct(category.id);
-      productController.setCategoryProducts(
-          'Name', productController.subCategoryProducts);
+      productController.getSubCategoryProduct(category.name);
+      productController.setSubCategoryProducts(
+          'Latest Items', productController.subCategoryProducts);
     } else {
-      productController.getCategoryProduct(category.id);
+      productController.getCategoryProduct(category.name);
       productController.setCategoryProducts(
-          'Name', productController.categoryProducts);
+          'Latest Items', productController.categoryProducts);
     }
 
     return Scaffold(
@@ -108,10 +108,14 @@ class FeaturedCategoryDetails extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
                         isDense: true,
                         isExpanded: true,
-                        value:
-                            productController.selectedCategorySortOption.value,
+                        value: isSubCategory
+                            ? productController
+                                .selectedSubCategorySortOption.value
+                            : productController
+                                .selectedCategorySortOption.value,
                         items: <String>[
                           'Name',
+                          'Latest Items',
                           'Low to High',
                           'High to Low',
                         ].map((String menu) {
@@ -121,8 +125,13 @@ class FeaturedCategoryDetails extends StatelessWidget {
                           );
                         }).toList(),
                         onChanged: (String? value) {
-                          productController.setCategoryProducts(
-                              value!, productController.categoryProducts);
+                          if (isSubCategory) {
+                            productController.setSubCategoryProducts(
+                                value!, productController.subCategoryProducts);
+                          } else {
+                            productController.setCategoryProducts(
+                                value!, productController.categoryProducts);
+                          }
                         },
                         underline: const SizedBox(),
                       ),
@@ -140,9 +149,10 @@ class FeaturedCategoryDetails extends StatelessWidget {
               if (productController.isLoading.value == true) {
                 return const PopularProductShimmer();
               }
-
               // if featured category empty
-              if (productController.categoryProducts.isEmpty) {
+              if (isSubCategory
+                  ? productController.subCategoryProducts.isEmpty
+                  : productController.categoryProducts.isEmpty) {
                 return const Center(child: Text('No data found'));
               }
 
@@ -160,10 +170,14 @@ class FeaturedCategoryDetails extends StatelessWidget {
                   crossAxisSpacing: 16,
                   childAspectRatio: .65,
                 ),
-                itemCount: productController.categoryProducts.length,
+                itemCount: isSubCategory
+                    ? productController.subCategoryProducts.length
+                    : productController.categoryProducts.length,
                 itemBuilder: (context, index) {
                   // category
-                  final product = productController.categoryProducts[index];
+                  final product = isSubCategory
+                      ? productController.subCategoryProducts[index]
+                      : productController.categoryProducts[index];
 
                   //
                   return GestureDetector(
@@ -193,10 +207,12 @@ class FeaturedCategoryDetails extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 color:
                                     Colors.blueAccent.shade100.withOpacity(.5),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(product.images[0]),
-                                ),
+                                image: product.images.isNotEmpty
+                                    ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(product.images[0]),
+                                      )
+                                    : null,
                               ),
                             ),
                           ),

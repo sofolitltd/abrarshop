@@ -63,17 +63,22 @@ class CartController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 1),
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
       );
     } else {
       cartItems.removeAt(index); // Remove item if present
 
       //
-      Get.snackbar("Item Removed", "${item.name} removed from cart",
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 1),
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      Get.snackbar(
+        "Item Removed",
+        "${item.name} removed from cart",
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 1),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 

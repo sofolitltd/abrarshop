@@ -154,8 +154,8 @@ class CategoryController extends GetxController {
   //
   assignFirstSubcategory() {
     if (featuredCategories.isNotEmpty) {
-      selectedCategory.value = featuredCategories[0].id;
-      fetchSubCategories(featuredCategories[0].id);
+      selectedCategory.value = featuredCategories[0].name;
+      fetchSubCategories(featuredCategories[0].name);
     }
   }
 }

@@ -24,10 +24,12 @@ class _ImageSectionState extends State<ImageSection> {
           Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent.shade100.withOpacity(.5),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(widget.images[selectedImage]),
-              ),
+              image: widget.images.isNotEmpty
+                  ? DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.images[selectedImage]),
+                    )
+                  : null,
             ),
           ),
           // Image.network(

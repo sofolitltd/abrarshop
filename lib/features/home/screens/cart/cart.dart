@@ -95,7 +95,7 @@ class Cart extends StatelessWidget {
                       height: 72,
                       width: 72,
                       decoration: BoxDecoration(
-                        color: Colors.red.shade100,
+                        color: Colors.blueAccent.shade100.withOpacity(.5),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.black12),
                         image: DecorationImage(

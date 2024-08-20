@@ -22,7 +22,7 @@ class CartSection extends StatelessWidget {
       id: product.id,
       name: product.name,
       price: product.salePrice,
-      imageUrl: product.images[0],
+      imageUrl: product.images.isNotEmpty ? product.images[0] : '',
       quantity: 1,
     );
 
@@ -79,6 +79,8 @@ class CartSection extends StatelessWidget {
                     snackPosition: SnackPosition.BOTTOM,
                     margin: const EdgeInsets.all(16),
                     duration: const Duration(seconds: 1),
+                    colorText: Colors.white,
+                    backgroundColor: Colors.green,
                   );
                 } else {
                   Get.snackbar(
