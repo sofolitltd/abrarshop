@@ -98,32 +98,36 @@ class Profile extends StatelessWidget {
   Widget _buildProfileHeader(User user) {
     final userController = Get.put(UserController());
 
-    return ListTile(
-      tileColor: Colors.blueAccent,
-      leading: const CircleAvatar(
-        radius: 24,
-      ),
-      title: Text(
-        userController.user.value.name,
-        style: const TextStyle(color: Colors.white),
-      ),
-      subtitle: Text(
-        userController.user.value.email,
-        style: const TextStyle(color: Colors.white),
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          // Implement edit profile functionality here
-        },
-        icon: const Icon(
-          Iconsax.edit,
-          color: Colors.white,
+    return Obx(
+      () => ListTile(
+        tileColor: Colors.blueAccent,
+        leading: const CircleAvatar(
+          radius: 24,
+        ),
+        title: Text(
+          userController.user.value.name,
+          style: const TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          userController.user.value.email,
+          style: const TextStyle(color: Colors.white),
+        ),
+        trailing: IconButton(
+          onPressed: () {
+            // Implement edit profile functionality here
+          },
+          icon: const Icon(
+            Iconsax.edit,
+            color: Colors.white,
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSettingsSection(BuildContext context) {
+    final userController = Get.put(UserController());
+
     return Container(
       constraints: const BoxConstraints(minHeight: 600),
       decoration: const BoxDecoration(
@@ -141,8 +145,10 @@ class Profile extends StatelessWidget {
           const SizedBox(height: 8),
           ..._buildAccountSettings(),
           const SizedBox(height: 16),
-          _buildSectionHeader(context, 'Admin'),
-          ..._buildAdminSettings(),
+          if (userController.user.value.email == 'asifreyad1@gmail.com') ...[
+            _buildSectionHeader(context, 'Admin'),
+            ..._buildAdminSettings(),
+          ],
         ],
       ),
     );
@@ -260,7 +266,7 @@ class Profile extends StatelessWidget {
           TextButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
-              Get.offAllNamed('/login'); // Redirect to login
+              Get.offAllNamed('/menu'); // Redirect to login
             },
             child: const Text('Sign Out'),
           ),

@@ -1,10 +1,10 @@
-import 'package:abrar_shop/features/admin/products_admin/add_products.dart';
-import 'package:abrar_shop/features/admin/products_admin/edit_products.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '/features/admin/products_admin/add_products.dart';
+import '/features/admin/products_admin/edit_products.dart';
 import '../../home/models/product_model.dart';
 
 class AllProductsAdmin extends StatelessWidget {
@@ -65,6 +65,20 @@ class AllProductsAdmin extends StatelessWidget {
                         color: Colors.black12,
                       ),
                       children: [
+                        // img
+                        TableCell(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'Image',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // name
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
@@ -84,6 +98,19 @@ class AllProductsAdmin extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'Category',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // sub
+                        TableCell(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'SubCategory',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -146,7 +173,32 @@ class AllProductsAdmin extends StatelessWidget {
                     for (var i = 0; i < docs.length; i++)
                       TableRow(
                         children: [
-                          //name
+                          //
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  color: Colors.blueAccent.shade100
+                                      .withOpacity(.2),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: docs[i]['images'].isNotEmpty
+                                      ? DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              docs[i]['images'][0]),
+                                        )
+                                      : null,
+                                ),
+                                // Assuming imageUrl is a valid image URL
+                              ),
+                            ),
+                          ),
+
+                          // name
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -163,12 +215,19 @@ class AllProductsAdmin extends StatelessWidget {
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                (docs[i]['category'] != '' ||
-                                        (docs[i]['subCategory'] != '')
-                                    ? '${docs[i]['category']}/${docs[i]['subCategory']}'
-                                    : '-'),
-                              ),
+                              child: Text((docs[i]['category'] != '')
+                                  ? '${docs[i]['category']}'
+                                  : '-'),
+                            ),
+                          ),
+
+                          // sub
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text((docs[i]['subCategory'] != '')
+                                  ? '${docs[i]['subCategory']}'
+                                  : '--'),
                             ),
                           ),
 

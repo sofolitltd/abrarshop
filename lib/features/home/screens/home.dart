@@ -1,11 +1,11 @@
-import 'package:abrar_shop/features/home/screens/categories/all_categories.dart';
-import 'package:abrar_shop/features/home/screens/products/featured_products.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '/features/home/controllers/product_controller.dart';
+import '/features/home/screens/categories/all_categories.dart';
 import '/features/home/screens/categories/featured_category_details.dart';
+import '/features/home/screens/products/featured_products.dart';
 import '/features/home/screens/products/products_details.dart';
 import '/features/home/screens/search.dart';
 import '/utils/constants/constants.dart';
@@ -24,7 +24,8 @@ class Home extends StatelessWidget {
     //  controller
     final categoryController = Get.put(CategoryController());
     final productController = Get.put(ProductController());
-    var productList = productController.allProducts;
+    productController.allProducts;
+
     final cartController = Get.put(CartController());
 
     // ui

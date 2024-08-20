@@ -35,7 +35,7 @@ class _AddProductState extends State<AddProduct> {
 
   final categoryController = Get.put(CategoryController());
 
-//
+// pick images
   Future<void> _pickImage() async {
     return showDialog(
       context: context,
@@ -47,7 +47,11 @@ class _AddProductState extends State<AddProduct> {
               onPressed: () async {
                 Navigator.pop(context); // Close the dialog
                 final picker = ImagePicker();
-                final pickedFiles = await picker.pickMultiImage();
+                final pickedFiles = await picker.pickMultiImage(
+                  imageQuality: 40,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
                 if (pickedFiles != null) {
                   setState(() {
                     _imageFiles = pickedFiles.map((x) => File(x.path)).toList();
@@ -60,8 +64,12 @@ class _AddProductState extends State<AddProduct> {
               onPressed: () async {
                 Navigator.pop(context); // Close the dialog
                 final picker = ImagePicker();
-                final pickedFile =
-                    await picker.pickImage(source: ImageSource.camera);
+                final pickedFile = await picker.pickImage(
+                  source: ImageSource.camera,
+                  imageQuality: 40,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
                 if (pickedFile != null) {
                   setState(() {
                     _imageFiles.add(File(pickedFile.path));
@@ -76,7 +84,7 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  //
+  // upload images
   Future<void> _uploadImages(String productId) async {
     _imageUrls.clear(); // Clear previous URLs
     for (int i = 0; i < _imageFiles.length; i++) {
@@ -88,6 +96,7 @@ class _AddProductState extends State<AddProduct> {
         await storageRef.putFile(_imageFiles[i]);
         String downloadUrl = await storageRef.getDownloadURL();
         _imageUrls.add(downloadUrl);
+        print(_imageUrls);
       } catch (e) {
         print('Error uploading image: $e');
       }
@@ -367,6 +376,7 @@ class _AddProductState extends State<AddProduct> {
                 //
                 const SizedBox(height: 16),
 
+                //
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -407,7 +417,6 @@ class _AddProductState extends State<AddProduct> {
                   ),
                 ),
 
-                // const SizedBox(height: 4),
                 // featured
                 Row(
                   children: [
@@ -439,20 +448,20 @@ class _AddProductState extends State<AddProduct> {
                               setState(() {
                                 isLoading = true;
                               });
-
                               //
+                              //   //
                               String id = DateTime.now()
                                   .millisecondsSinceEpoch
                                   .toString();
-
                               //
+                              //   //
                               String slug =
                                   _generateSlug(_nameController.text.trim());
 
                               //
                               await _uploadImages(id);
 
-                              //
+                              //   //
                               ProductModel product = ProductModel(
                                 id: id,
                                 sku: '',

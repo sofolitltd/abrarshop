@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../navigation_menu.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -32,7 +34,16 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (userCredential.user != null) {
-          Get.offAllNamed(route);
+          Get.offAllNamed('/menu');
+
+          NavigatorController navigatorController =
+              Get.find<NavigatorController>();
+          if (route == '/profile') {
+            // Set the selected index to 0 (Home)
+            navigatorController.selectedIndex.value = 3;
+          } else {
+            (Get.offAllNamed(route));
+          }
         }
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -48,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final route = Get.arguments as String;
+    final route = Get.arguments as String?;
     print(route); // Cast to Map
 
     return Scaffold(
@@ -133,11 +144,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                           textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) => _login(route),
+                          onFieldSubmitted: (_) => _login(route!),
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () => _login(route),
+                          onPressed: () => _login(route!),
                           child: _isLoading
                               ? const SizedBox(
                                   height: 24,

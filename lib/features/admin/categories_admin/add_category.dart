@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:abrar_shop/features/home/controllers/category_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '/features/home/models/category_model.dart';
 
@@ -23,10 +27,80 @@ class _AddCategoryState extends State<AddCategory> {
 
   bool _isLoading = false;
 
+  File? _imageFile; // To store the selected image
+  String? _imageUrl;
+
   //
   String _generateSlug(String name) {
     // Simple slug generation: lowercase, replace spaces with hyphens
     return name.toLowerCase().replaceAll(' ', '-');
+  }
+
+  //
+  Future<void> _pickImage() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Choose Image Source'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.pop(context); // Close the dialog
+                final picker = ImagePicker();
+                final pickedFile = await picker.pickImage(
+                  source: ImageSource.gallery,
+                  imageQuality: 40,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
+                if (pickedFile != null) {
+                  setState(() {
+                    _imageFile = File(pickedFile.path);
+                  });
+                }
+              },
+              child: const Text('Gallery'),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.pop(context); // Close the dialog
+                final picker = ImagePicker();
+                final pickedFile = await picker.pickImage(
+                  source: ImageSource.camera,
+                  imageQuality: 40,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
+                if (pickedFile != null) {
+                  setState(() {
+                    _imageFile = File(pickedFile.path);
+                  });
+                }
+              },
+              child: const Text('Camera'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //
+  Future<void> _uploadImage(String categoryId) async {
+    if (_imageFile == null) return; // No image selected
+
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('categories/$categoryId.jpg'); // Unique name for the image
+
+    try {
+      await storageRef.putFile(_imageFile!);
+      _imageUrl = await storageRef.getDownloadURL();
+      print('Image uploaded: $_imageUrl');
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
   }
 
 //
@@ -37,16 +111,23 @@ class _AddCategoryState extends State<AddCategory> {
     final categoryId = DateTime.now().microsecondsSinceEpoch.toString();
     final slug = _generateSlug(_nameController.text.trim());
 
-    final category = CategoryModel(
-      id: categoryId,
-      name: _nameController.text.trim(),
-      slug: slug,
-      imageUrl: '', // Add your logic for image URL
-      parentId: _selectedParent ?? '',
-      isFeatured: _isFeatured,
-    );
-
     try {
+      //
+      await _uploadImage(categoryId);
+
+      //
+      final category = CategoryModel(
+        id: categoryId,
+        name: _nameController.text.trim(),
+        slug: slug,
+        imageUrl: _imageUrl ?? '',
+        // Add your logic for image URL
+        parentId: _selectedParent ?? '',
+        isFeatured: _isFeatured,
+        createdDate: Timestamp.now(),
+      );
+
+      //
       await _firestore
           .collection('categories')
           .doc(category.id)
@@ -71,7 +152,7 @@ class _AddCategoryState extends State<AddCategory> {
       appBar: AppBar(title: const Text('Add Category')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
           children: [
             //
             TextField(
@@ -81,6 +162,7 @@ class _AddCategoryState extends State<AddCategory> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 16),
 
             //
@@ -101,8 +183,8 @@ class _AddCategoryState extends State<AddCategory> {
                         ),
                         child: DropdownButton<String>(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 8), // Add horizontal padding
+                              vertical: 14, horizontal: 8),
+                          // Add horizontal padding
                           isDense: true,
                           isExpanded: true,
                           value: _selectedParent,
@@ -138,6 +220,47 @@ class _AddCategoryState extends State<AddCategory> {
             //
             const SizedBox(height: 16),
 
+            // Image Display and Picker
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // if (_imageFile != null)
+                //
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black12),
+                    borderRadius: BorderRadius.circular(8),
+                    image: _imageFile != null
+                        ? DecorationImage(
+                            image: FileImage(_imageFile!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: _imageFile != null
+                      ? null
+                      : const Icon(
+                          Icons.image_outlined,
+                          color: Colors.black38,
+                          size: 32,
+                        ),
+                ),
+
+                const SizedBox(width: 16),
+
+                //
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: const Text('Choose Image'),
+                ),
+              ],
+            ),
+
+            //
+            const SizedBox(height: 16),
+
             // featured
             Row(
               children: [
@@ -156,21 +279,23 @@ class _AddCategoryState extends State<AddCategory> {
               ],
             ),
 
-            //
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
             //
-            ElevatedButton(
-              onPressed: _isLoading ? null : _addCategory,
-              child: _isLoading == true
-                  ? const SizedBox(
-                      height: 32,
-                      width: 32,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text('Add Category'),
+            SizedBox(
+              width: double.maxFinite,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _addCategory,
+                child: _isLoading == true
+                    ? const SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('Add Category'),
+              ),
             ),
           ],
         ),

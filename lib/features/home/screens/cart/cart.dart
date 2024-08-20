@@ -98,9 +98,11 @@ class Cart extends StatelessWidget {
                         color: Colors.blueAccent.shade100.withOpacity(.5),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.black12),
-                        image: DecorationImage(
-                          image: NetworkImage(cartItem.imageUrl),
-                        ),
+                        image: cartItem.imageUrl.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(cartItem.imageUrl),
+                              )
+                            : null,
                       ),
                       // Assuming imageUrl is a valid image URL
                     ),

@@ -50,18 +50,16 @@ class _EditProductState extends State<EditProduct> {
 
     // _selectedBrand = widget.product.brand;
     _isFeatured = widget.product.isFeatured;
+    if (widget.product.category != '') {}
+    _selectedCategory = widget.product.category;
 
-    if (widget.product.category.isNotEmpty) {
-      _selectedCategory = widget.product.category;
-    }
-    if (widget.product.subCategory.isNotEmpty) {
+    if (widget.product.subCategory != '') {
       _selectedSubCategory = widget.product.subCategory;
     }
-    if (widget.product.images.isNotEmpty) {
-      _imageUrls = widget.product.images;
-    }
+    _imageUrls = widget.product.images;
   }
 
+  // pic image
   Future<void> _pickImage() async {
     return showDialog(
       context: context,
@@ -102,6 +100,7 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
+  // upload image
   Future<void> _uploadImages(String productId) async {
     _imageUrls.clear();
     for (int i = 0; i < _imageFiles.length; i++) {
@@ -118,9 +117,23 @@ class _EditProductState extends State<EditProduct> {
     }
   }
 
+  //
+  Future<void> _deletePreviousImages() async {
+    for (String imageUrl in widget.product.images) {
+      try {
+        Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+        await imageRef.delete();
+        print('Deleted image: $imageUrl');
+      } catch (e) {
+        print('Error deleting image: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     categoryController.fetchCategories();
+    print(widget.product.subCategory);
 
     return Scaffold(
       appBar: AppBar(
@@ -281,7 +294,7 @@ class _EditProductState extends State<EditProduct> {
                                 );
                               }).toList(),
                               onChanged: (String? value) {
-                                _selectedCategory = value;
+                                _selectedCategory = value!;
                                 _selectedSubCategory = null;
                                 setState(() {});
                               },
@@ -339,7 +352,7 @@ class _EditProductState extends State<EditProduct> {
                                   }).toList(),
                                   onChanged: (String? value) {
                                     setState(() {
-                                      _selectedSubCategory = value;
+                                      _selectedSubCategory = value!;
                                     });
                                   },
                                   underline: const SizedBox(),
@@ -438,6 +451,10 @@ class _EditProductState extends State<EditProduct> {
                             try {
                               // Upload images if any new images were selected
                               if (_imageFiles.isNotEmpty) {
+                                // delete old images
+                                await _deletePreviousImages();
+
+                                // add new images
                                 await _uploadImages(widget.product.id);
                               }
 
@@ -453,9 +470,9 @@ class _EditProductState extends State<EditProduct> {
                                 'salePrice':
                                     double.parse(_salePriceController.text),
                                 'stock': int.parse(_stockPriceController.text),
-                                'category': _selectedCategory,
-                                'subCategory': _selectedSubCategory,
-                                'brand': _selectedBrand,
+                                'category': _selectedCategory ?? '',
+                                'subCategory': _selectedSubCategory ?? '',
+                                'brand': _selectedBrand ?? '',
                                 'isFeatured': _isFeatured,
                                 'images': _imageUrls,
                               });

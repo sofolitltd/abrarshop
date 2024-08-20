@@ -35,7 +35,7 @@ class AllCategoriesAdmin extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('categories')
-            .orderBy('parentId')
+            .orderBy('createdDate', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -65,6 +65,20 @@ class AllCategoriesAdmin extends StatelessWidget {
                         color: Colors.black12,
                       ),
                       children: [
+                        //
+                        TableCell(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'Image',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        //name
+
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
@@ -83,7 +97,7 @@ class AllCategoriesAdmin extends StatelessWidget {
                             padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
-                                'Parent',
+                                'Parent Category',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -130,10 +144,37 @@ class AllCategoriesAdmin extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    //
                     for (var i = 0; i < docs.length; i++)
                       TableRow(
                         children: [
-                          //name
+                          //image
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  color: Colors.blueAccent.shade100
+                                      .withOpacity(.2),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: docs[i]['imageUrl'].isNotEmpty
+                                      ? DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image:
+                                              NetworkImage(docs[i]['imageUrl']),
+                                        )
+                                      : null,
+                                ),
+                                // Assuming imageUrl is a valid image URL
+                              ),
+                            ),
+                          ),
+
+                          // name
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
