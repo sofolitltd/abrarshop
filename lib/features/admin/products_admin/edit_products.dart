@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:abrar_shop/features/home/controllers/brand_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _EditProductState extends State<EditProduct> {
   List<String> _imageUrls = [];
 
   final categoryController = Get.put(CategoryController());
+  final brandController = Get.put(BrandController());
 
   @override
   void initState() {
@@ -55,6 +57,10 @@ class _EditProductState extends State<EditProduct> {
 
     if (widget.product.subCategory != '') {
       _selectedSubCategory = widget.product.subCategory;
+    }
+
+    if (widget.product.brand != '') {
+      _selectedBrand = widget.product.brand;
     }
     _imageUrls = widget.product.images;
   }
@@ -109,6 +115,7 @@ class _EditProductState extends State<EditProduct> {
 
       try {
         await storageRef.putFile(_imageFiles[i]);
+
         String downloadUrl = await storageRef.getDownloadURL();
         _imageUrls.add(downloadUrl);
       } catch (e) {
@@ -133,7 +140,7 @@ class _EditProductState extends State<EditProduct> {
   @override
   Widget build(BuildContext context) {
     categoryController.fetchCategories();
-    print(widget.product.subCategory);
+    brandController.fetchBrands();
 
     return Scaffold(
       appBar: AppBar(
@@ -155,7 +162,9 @@ class _EditProductState extends State<EditProduct> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 10),
+                      vertical: 14,
+                      horizontal: 10,
+                    ),
                   ),
                   textCapitalization: TextCapitalization.sentences,
                   validator: (value) {
@@ -317,6 +326,7 @@ class _EditProductState extends State<EditProduct> {
                   ),
                 ),
 
+                // sub
                 if (_selectedCategory != null) ...[
                   const SizedBox(height: 16),
                   Obx(
@@ -376,6 +386,69 @@ class _EditProductState extends State<EditProduct> {
                   ),
                 ],
 
+                // brand
+                if (_selectedCategory != null ||
+                    _selectedSubCategory != null) ...[
+                  const SizedBox(height: 16),
+                  Obx(
+                    () {
+                      //
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  // Add horizontal padding
+                                  isDense: true,
+                                  isExpanded: true,
+                                  value: _selectedBrand,
+                                  hint: const Text('Brand'),
+                                  items: brandController.allBrands
+                                      .where((brand) =>
+                                          brand.parentId == _selectedCategory ||
+                                          brand.parentId ==
+                                              _selectedSubCategory) // Compare with parent ID
+                                      .map((brand) {
+                                    return DropdownMenuItem<String>(
+                                      value: brand.name,
+                                      // Use the category ID for value
+                                      child: Text(brand.name),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    _selectedBrand = value;
+                                    setState(() {});
+                                  },
+                                  underline: const SizedBox(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (_selectedBrand != null)
+                            IconButton(
+                              // Add clear icon button
+                              onPressed: () {
+                                _selectedBrand = null; // Clear the selection
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.clear),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+
                 const SizedBox(height: 16),
 
                 // Images
@@ -383,7 +456,7 @@ class _EditProductState extends State<EditProduct> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      if (_imageFiles != null)
+                      if (_imageFiles.isNotEmpty)
                         Row(
                           children: _imageFiles.map((imageFile) {
                             return Container(
@@ -391,11 +464,33 @@ class _EditProductState extends State<EditProduct> {
                               width: 80,
                               margin: const EdgeInsets.only(right: 8),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: Colors.black12),
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: FileImage(imageFile))),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.black12),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(imageFile),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        )
+                      else
+                        Row(
+                          children: widget.product.images.map((image) {
+                            return Container(
+                              height: 80,
+                              width: 80,
+                              margin: const EdgeInsets.only(right: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.black12),
+                                image: widget.product.images.isNotEmpty
+                                    ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(image),
+                                      )
+                                    : null,
+                              ),
                             );
                           }).toList(),
                         ),

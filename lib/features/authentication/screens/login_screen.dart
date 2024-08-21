@@ -34,12 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (userCredential.user != null) {
-          Get.offAllNamed('/menu');
-
+          //
           NavigatorController navigatorController =
               Get.find<NavigatorController>();
           if (route == '/profile') {
             // Set the selected index to 0 (Home)
+            (Get.offAllNamed('/menu'));
             navigatorController.selectedIndex.value = 3;
           } else {
             (Get.offAllNamed(route));
@@ -151,9 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () => _login(route!),
                           child: _isLoading
                               ? const SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(),
+                                  height: 32,
+                                  width: 32,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
                                 )
                               : Text('Login'.toUpperCase()),
                         ),

@@ -1,3 +1,4 @@
+import 'package:abrar_shop/features/admin/brands_admin/all_brands_admin.dart';
 import 'package:abrar_shop/features/admin/products_admin/all_products_admin.dart';
 import 'package:abrar_shop/features/authentication/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -196,6 +197,7 @@ class Profile extends StatelessWidget {
 
   List<Widget> _buildAdminSettings() {
     return [
+      // cat
       ListTile(
         onTap: () => Get.to(() => const AllCategoriesAdmin()),
         contentPadding: EdgeInsets.zero,
@@ -210,6 +212,24 @@ class Profile extends StatelessWidget {
           color: Colors.blueAccent,
         ),
       ),
+
+      // brand
+      ListTile(
+        onTap: () => Get.to(() => const AllBrandsAdmin()),
+        contentPadding: EdgeInsets.zero,
+        title: const Text(
+          'Add Brand',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: const Text('Add product brands'),
+        leading: const Icon(
+          Iconsax.briefcase,
+          size: 32,
+          color: Colors.blueAccent,
+        ),
+      ),
+
+      //
       ListTile(
         onTap: () => Get.to(() => const AllProductsAdmin()),
         contentPadding: EdgeInsets.zero,

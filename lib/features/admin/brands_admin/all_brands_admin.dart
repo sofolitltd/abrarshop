@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '/features/admin/products_admin/add_products.dart';
-import '/features/admin/products_admin/edit_products.dart';
-import '../../home/models/product_model.dart';
+import '/features/admin/brands_admin/add_brand.dart';
+import '../../home/models/brand_model.dart';
+import 'edit_brand.dart';
 
-class AllProductsAdmin extends StatelessWidget {
-  const AllProductsAdmin({super.key});
+class AllBrandsAdmin extends StatelessWidget {
+  const AllBrandsAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Products'),
+        title: const Text('Brands'),
       ),
 
       //
@@ -22,9 +22,9 @@ class AllProductsAdmin extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ElevatedButton.icon(
           onPressed: () {
-            Get.to(() => const AddProduct());
+            Get.to(() => const AddBrand());
           },
-          label: const Text('Add Product'),
+          label: const Text('Add Brand'),
           icon: const Icon(
             Iconsax.add_circle,
             size: 18,
@@ -34,7 +34,7 @@ class AllProductsAdmin extends StatelessWidget {
 
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('products')
+            .collection('brands')
             .orderBy('createdDate', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
@@ -65,19 +65,6 @@ class AllProductsAdmin extends StatelessWidget {
                         color: Colors.black12,
                       ),
                       children: [
-                        // no
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'No',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
                         //
                         TableCell(
                           child: Padding(
@@ -90,8 +77,8 @@ class AllProductsAdmin extends StatelessWidget {
                             ),
                           ),
                         ),
+                        //name
 
-                        // name
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
@@ -104,65 +91,26 @@ class AllProductsAdmin extends StatelessWidget {
                           ),
                         ),
 
-                        //  category
+                        // parent category
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
-                                'Category',
+                                'Parent Category',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
                         ),
 
-                        // sub
+                        // slug
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
-                                'SubCategory',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // brand
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Brand',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // stock
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Stock',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // price
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Price',
+                                'Slug',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -201,18 +149,7 @@ class AllProductsAdmin extends StatelessWidget {
                     for (var i = 0; i < docs.length; i++)
                       TableRow(
                         children: [
-                          //no
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: Text(
-                                '${i + 1}',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-
-                          // img
+                          //image
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -224,11 +161,11 @@ class AllProductsAdmin extends StatelessWidget {
                                   color: Colors.blueAccent.shade100
                                       .withOpacity(.2),
                                   borderRadius: BorderRadius.circular(5),
-                                  image: docs[i]['images'].isNotEmpty
+                                  image: docs[i]['imageUrl'].isNotEmpty
                                       ? DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              docs[i]['images'][0]),
+                                          image:
+                                              NetworkImage(docs[i]['imageUrl']),
                                         )
                                       : null,
                                 ),
@@ -250,57 +187,23 @@ class AllProductsAdmin extends StatelessWidget {
                             ),
                           ),
 
-                          // category
+                          // parent
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['category'] != '')
-                                  ? '${docs[i]['category']}'
-                                  : '-'),
+                              child: Text(docs[i]['parentId'] ?? ''),
                             ),
                           ),
 
-                          // sub
+                          //slug
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['subCategory'] != '')
-                                  ? '${docs[i]['subCategory']}'
-                                  : '--'),
+                              child: Text(docs[i]['slug']),
                             ),
                           ),
 
-                          // brand
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['brand'] != '')
-                                  ? '${docs[i]['brand']}'
-                                  : '-'),
-                            ),
-                          ),
-
-                          //stock
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                docs[i]['stock'].toString(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-
-                          // price
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Text(docs[i]['salePrice'].toStringAsFixed(0)),
-                            ),
-                          ),
-
-                          //featured
+                          // featured
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -333,11 +236,9 @@ class AllProductsAdmin extends StatelessWidget {
                                       ),
                                     ),
                                     onPressed: () {
-                                      final product =
-                                          ProductModel.fromQuerySnapshot(
-                                              docs[i]);
-                                      Get.to(
-                                          () => EditProduct(product: product));
+                                      final brand =
+                                          BrandModel.fromJson(docs[i]);
+                                      Get.to(() => EditBrand(brand: brand));
                                     },
                                     icon: const Icon(
                                       Icons.edit,
@@ -378,7 +279,7 @@ class AllProductsAdmin extends StatelessWidget {
 
   // delete dialog
   Future<void> showDeleteConfirmationDialog(
-      BuildContext context, String productId) async {
+      BuildContext context, String categoryId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -388,7 +289,7 @@ class AllProductsAdmin extends StatelessWidget {
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure you want to delete this category?'),
+                Text('Are you sure you want to delete this brand?'),
               ],
             ),
           ),
@@ -404,19 +305,19 @@ class AllProductsAdmin extends StatelessWidget {
               onPressed: () async {
                 try {
                   await FirebaseFirestore.instance
-                      .collection('products')
-                      .doc(productId)
+                      .collection('brands')
+                      .doc(categoryId)
                       .delete();
                   Get.snackbar(
                     'Success',
-                    'Product deleted successfully',
+                    'Brand deleted successfully',
                     colorText: Colors.white,
                     backgroundColor: Colors.green,
                   );
                 } catch (e) {
                   Get.snackbar(
                     'Error',
-                    'Failed to delete category: $e',
+                    'Failed to delete brand: $e',
                     colorText: Colors.white,
                     backgroundColor: Colors.red,
                   );
@@ -430,8 +331,3 @@ class AllProductsAdmin extends StatelessWidget {
     );
   }
 }
-
-//
-// BRB Lovely Ceiling Fan 56"
-// Al Nuaim Denim Black 6ML
-// Al Rehab Silver 6ml

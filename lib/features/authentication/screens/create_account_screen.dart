@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../navigation_menu.dart';
 import '../models/user_model.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -63,9 +64,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               .doc(user.uid)
               .set(user.toJson())
               .then((val) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Successfully Create your Account')));
-            Get.offAllNamed(route);
+            // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Successfully Create your Account')));
+            //
+            NavigatorController navigatorController =
+                Get.find<NavigatorController>();
+            if (route == '/profile') {
+              // Set the selected index to 0 (Home)
+              (Get.offAllNamed('/menu'));
+              navigatorController.selectedIndex.value = 3;
+            } else {
+              (Get.offAllNamed(route));
+            }
           });
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(

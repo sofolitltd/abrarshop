@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '/features/home/controllers/brand_controller.dart';
 import '../../home/controllers/category_controller.dart';
 import '../../home/models/product_model.dart';
 
@@ -34,6 +35,7 @@ class _AddProductState extends State<AddProduct> {
   final List<String> _imageUrls = [];
 
   final categoryController = Get.put(CategoryController());
+  final brandController = Get.put(BrandController());
 
 // pick images
   Future<void> _pickImage() async {
@@ -265,7 +267,8 @@ class _AddProductState extends State<AddProduct> {
                             child: DropdownButton<String>(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 14,
-                              ), // Add horizontal padding
+                              ),
+                              // Add horizontal padding
                               isDense: true,
                               isExpanded: true,
                               value: _selectedCategory,
@@ -273,8 +276,8 @@ class _AddProductState extends State<AddProduct> {
                               items: categoryController.allMainCategories
                                   .map((category) {
                                 return DropdownMenuItem<String>(
-                                  value: category
-                                      .name, // Use the category ID for value
+                                  value: category.name,
+                                  // Use the category ID for value
                                   child: Text(category.name),
                                 );
                               }).toList(),
@@ -342,8 +345,8 @@ class _AddProductState extends State<AddProduct> {
                                           _selectedCategory) // Compare with parent ID
                                       .map((category) {
                                     return DropdownMenuItem<String>(
-                                      value: category
-                                          .name, // Use the category ID for value
+                                      value: category.name,
+                                      // Use the category ID for value
                                       child: Text(category.name),
                                     );
                                   }).toList(),
@@ -363,6 +366,70 @@ class _AddProductState extends State<AddProduct> {
                               onPressed: () {
                                 _selectedSubCategory =
                                     null; // Clear the selection
+                                _selectedBrand = null;
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.clear),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+
+                // brand
+                if (_selectedCategory != null ||
+                    _selectedSubCategory != null) ...[
+                  const SizedBox(height: 16),
+                  Obx(
+                    () {
+                      //
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  // Add horizontal padding
+                                  isDense: true,
+                                  isExpanded: true,
+                                  value: _selectedBrand,
+                                  hint: const Text('Brand'),
+                                  items: brandController.allBrands
+                                      .where((brand) =>
+                                          brand.parentId == _selectedCategory ||
+                                          brand.parentId ==
+                                              _selectedSubCategory) // Compare with parent ID
+                                      .map((brand) {
+                                    return DropdownMenuItem<String>(
+                                      value: brand.name,
+                                      // Use the category ID for value
+                                      child: Text(brand.name),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    _selectedBrand = value;
+                                    setState(() {});
+                                  },
+                                  underline: const SizedBox(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (_selectedBrand != null)
+                            IconButton(
+                              // Add clear icon button
+                              onPressed: () {
+                                _selectedBrand = null; // Clear the selection
                                 setState(() {});
                               },
                               icon: const Icon(Icons.clear),
@@ -476,7 +543,7 @@ class _AddProductState extends State<AddProduct> {
                                 stock: int.parse(_stockPriceController.text),
                                 images: _imageUrls,
                                 category: _selectedCategory ?? "",
-                                subCategory: _selectedBrand ?? "",
+                                subCategory: _selectedSubCategory ?? "",
                                 brand: _selectedBrand ?? "",
                                 isFeatured: _isFeatured,
                                 createdDate: Timestamp.now(),

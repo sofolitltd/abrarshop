@@ -16,7 +16,7 @@ class AllProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productController = Get.put(ProductController());
-    productController.fetchProducts();
+    // productController.fetchProducts();
     productController.setProducts(
         'Latest Items', productController.allProducts);
     //

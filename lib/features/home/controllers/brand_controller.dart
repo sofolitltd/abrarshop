@@ -8,8 +8,8 @@
 //
 //   final isLoading = false.obs;
 //   final _categoryRepositories = Get.put(CategoryRepository());
-//   RxList<CategoryModel> allCategories = <CategoryModel>[].obs;
-//   RxList<CategoryModel> featuredCategories = <CategoryModel>[].obs;
+//   RxList<BrandModel> allCategories = <BrandModel>[].obs;
+//   RxList<BrandModel> featuredCategories = <BrandModel>[].obs;
 //
 //   RxString selectedCategory = ''.obs;
 //
@@ -47,7 +47,7 @@
 //   }
 //
 //   // product by category
-//   Future<List<CategoryModel>> getCategoryProduct(String categoryId) async {
+//   Future<List<BrandModel>> getCategoryProduct(String categoryId) async {
 //     try {
 //       allCategories.assignAll(
 //         allCategories.where((category) => category.parentId == categoryId).toList(),
@@ -68,7 +68,7 @@
 //   //     isLoading.value = true;
 //   //
 //   //     //
-//   //     final List<CategoryModel> categories =
+//   //     final List<BrandModel> categories =
 //   //         await _categoryRepositories.getCategoriesByQuery(query);
 //   //
 //   //     return categories;
@@ -81,50 +81,45 @@
 //   // }
 // }
 
+import 'package:abrar_shop/data/repositories/brands/brand_repository.dart';
+import 'package:abrar_shop/features/home/models/brand_model.dart';
 import 'package:get/get.dart';
 
-import '/data/repositories/categories/category_repository.dart';
-import '../models/category_model.dart';
-
-class CategoryController extends GetxController {
-  static CategoryController get instance => Get.find();
+class BrandController extends GetxController {
+  static BrandController get instance => Get.find();
 
   final isLoading = false.obs;
-  final _categoriesRepository = Get.put(CategoryRepository());
-  RxList<CategoryModel> allCategories = <CategoryModel>[].obs;
-  RxList<CategoryModel> allMainCategories = <CategoryModel>[].obs;
+  final _brandsRepository = Get.put(BrandRepository());
+  RxList<BrandModel> allBrands = <BrandModel>[].obs;
+  RxList<BrandModel> allMainBrands = <BrandModel>[].obs;
 
   //
-  RxList<CategoryModel> featuredCategories = <CategoryModel>[].obs;
-  RxList<CategoryModel> subCategories =
-      <CategoryModel>[].obs; // For subcategories
+  RxList<BrandModel> featuredBrands = <BrandModel>[].obs;
 
   RxString selectedCategory = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchCategories().then((_) {
-      assignFirstSubcategory();
-    });
+    fetchBrands();
   }
 
   // fetch data
-  fetchCategories() async {
+  fetchBrands() async {
     try {
       isLoading.value = true;
-      final categories = await _categoriesRepository.getAllCategories();
+      final brands = await _brandsRepository.getAllBrands();
 
       //
-      allCategories.assignAll(categories);
+      allBrands.assignAll(brands);
 
       //
-      allMainCategories.assignAll(
-          categories.where((category) => category.parentId.isEmpty).toList());
+      allMainBrands.assignAll(
+          brands.where((category) => category.parentId.isEmpty).toList());
 
       //
-      featuredCategories.assignAll(categories
-          .where((category) => category.isFeatured && category.parentId.isEmpty)
+      featuredBrands.assignAll(brands
+          .where((brand) => brand.isFeatured && brand.parentId.isEmpty)
           .take(8)
           .toList());
 
@@ -133,29 +128,6 @@ class CategoryController extends GetxController {
       throw 'Something wrong when fetch: $e';
     } finally {
       isLoading.value = false;
-    }
-  }
-
-  // Fetch subcategories based on selected parent category
-  void fetchSubCategories(String parentId) async {
-    try {
-      subCategories.assignAll(
-        allCategories
-            .where((category) => category.parentId == parentId)
-            .toList(),
-      );
-    } catch (e) {
-      // Handle errors appropriately
-      print("Error fetching subcategories: $e");
-      subCategories.clear(); // Clear the list in case of an error
-    }
-  }
-
-  //
-  assignFirstSubcategory() {
-    if (featuredCategories.isNotEmpty) {
-      selectedCategory.value = featuredCategories[0].name;
-      fetchSubCategories(featuredCategories[0].name);
     }
   }
 }

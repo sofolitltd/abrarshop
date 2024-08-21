@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:abrar_shop/features/home/models/brand_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,16 +11,16 @@ import 'package:image_picker/image_picker.dart';
 import '/features/home/controllers/category_controller.dart';
 import '/features/home/models/category_model.dart';
 
-class EditCategory extends StatefulWidget {
-  final CategoryModel category;
+class EditBrand extends StatefulWidget {
+  final BrandModel brand;
 
-  const EditCategory({super.key, required this.category});
+  const EditBrand({super.key, required this.brand});
 
   @override
-  State<EditCategory> createState() => _EditCategoryState();
+  State<EditBrand> createState() => _EditBrandState();
 }
 
-class _EditCategoryState extends State<EditCategory> {
+class _EditBrandState extends State<EditBrand> {
   final categoryController = Get.put(CategoryController());
 
   final TextEditingController _nameController = TextEditingController();
@@ -34,18 +36,19 @@ class _EditCategoryState extends State<EditCategory> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.category.name;
-    if (widget.category.parentId.isNotEmpty) {
-      _selectedParent = widget.category.parentId;
+    _nameController.text = widget.brand.name;
+    if (widget.brand.parentId.isNotEmpty) {
+      _selectedParent = widget.brand.parentId;
     }
-    _isFeatured = widget.category.isFeatured;
-    _imageUrl = widget.category.imageUrl;
+    _isFeatured = widget.brand.isFeatured;
+    _imageUrl = widget.brand.imageUrl;
   }
 
   String _generateSlug(String name) {
     return name.toLowerCase().replaceAll(' ', '-');
   }
 
+  //
   Future<void> _pickImage() async {
     return showDialog(
       context: context,
@@ -56,6 +59,8 @@ class _EditCategoryState extends State<EditCategory> {
             SimpleDialogOption(
               onPressed: () async {
                 Navigator.pop(context);
+
+                //
                 final picker = ImagePicker();
                 final pickedFile = await picker.pickImage(
                   source: ImageSource.gallery,
@@ -95,14 +100,22 @@ class _EditCategoryState extends State<EditCategory> {
     );
   }
 
-  Future<void> _uploadImage(String categoryId) async {
+  //
+  Future<void> _uploadImage(String brandId) async {
     if (_imageFile == null) return;
 
     final storageRef =
-        FirebaseStorage.instance.ref().child('categories/$categoryId.jpg');
+        FirebaseStorage.instance.ref().child('brands/$brandId.jpg');
 
     try {
-      await storageRef.putFile(_imageFile!);
+      if (kIsWeb) {
+        // For web, use putData instead of putFile
+        final bytes = await _imageFile!.readAsBytes();
+        await storageRef.putData(bytes);
+      } else {
+        // For mobile, continue using putFile
+        await storageRef.putFile(_imageFile!);
+      }
 
       _imageUrl = await storageRef.getDownloadURL();
       print('Image uploaded: $_imageUrl');
@@ -113,12 +126,12 @@ class _EditCategoryState extends State<EditCategory> {
 
   //
   Future<void> _deletePreviousImage() async {
-    if (widget.category.imageUrl.isNotEmpty && _imageFile != null) {
+    if (widget.brand.imageUrl.isNotEmpty && _imageFile != null) {
       try {
         Reference imageRef =
-            FirebaseStorage.instance.refFromURL(widget.category.imageUrl);
+            FirebaseStorage.instance.refFromURL(widget.brand.imageUrl);
         await imageRef.delete();
-        print('Deleted previous image: ${widget.category.imageUrl}');
+        print('Deleted previous image: ${widget.brand.imageUrl}');
       } catch (e) {
         print('Error deleting previous image: $e');
       }
@@ -126,7 +139,7 @@ class _EditCategoryState extends State<EditCategory> {
   }
 
   //
-  void _updateCategory() async {
+  void _updateBrand() async {
     _isLoading = true;
     setState(() {});
 
@@ -135,53 +148,38 @@ class _EditCategoryState extends State<EditCategory> {
     try {
       if (_imageFile != null) {
         await _deletePreviousImage();
-        await _uploadImage(widget.category.id);
+        await _uploadImage(widget.brand.id);
       }
 
-      final updatedCategory = CategoryModel(
-        id: widget.category.id,
+      final brandCategory = BrandModel(
+        id: widget.brand.id,
         name: _nameController.text.trim(),
         slug: slug,
-        imageUrl: _imageUrl ?? widget.category.imageUrl,
+        imageUrl: _imageUrl ?? widget.brand.imageUrl,
         parentId: _selectedParent ?? '',
         isFeatured: _isFeatured,
         createdDate: Timestamp.now(),
       );
 
       // Update products and subcategories first
-      if (_nameController.text != widget.category.name ||
-          _selectedParent != widget.category.parentId) {
+      if (_nameController.text != widget.brand.name) {
         QuerySnapshot productsSnapshot = await FirebaseFirestore.instance
             .collection('products')
-            .where(_selectedParent == null ? 'category' : 'subCategory',
-                isEqualTo: widget.category.name)
+            .where('brand', isEqualTo: widget.brand.name)
             .get();
 
         for (var doc in productsSnapshot.docs) {
           await doc.reference.update({
-            _selectedParent == null ? 'category' : 'subCategory':
-                _nameController.text
-          });
-        }
-
-        // Update subcategories (if any)
-        QuerySnapshot categorySnapshot = await FirebaseFirestore.instance
-            .collection('categories')
-            .where('parentId', isEqualTo: widget.category.name)
-            .get();
-
-        for (var doc in categorySnapshot.docs) {
-          await doc.reference.update({
-            'parentId': _nameController.text,
+            'brand': _nameController.text,
           });
         }
       }
 
       // Now update the category itself
       await _firestore
-          .collection('categories')
-          .doc(updatedCategory.id)
-          .update(updatedCategory.toJson())
+          .collection('brands')
+          .doc(brandCategory.id)
+          .update(brandCategory.toJson())
           .then((val) {
         _isLoading = false;
         setState(() {});
@@ -198,10 +196,9 @@ class _EditCategoryState extends State<EditCategory> {
   @override
   Widget build(BuildContext context) {
     categoryController.fetchCategories();
-    categoryController.allMainCategories.map((f) => print(f.name)).toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Category')),
+      appBar: AppBar(title: const Text('Edit Brand')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -209,15 +206,14 @@ class _EditCategoryState extends State<EditCategory> {
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Category Name',
+                labelText: 'Brand Name',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             Obx(() {
-              List<CategoryModel> categories = categoryController
-                  .allMainCategories
-                  .where((cat) => cat.id != widget.category.id)
+              List<CategoryModel> categories = categoryController.allCategories
+                  // .where((cat) => cat.name != widget.brand.parentId)
                   .toList();
               return ButtonTheme(
                 alignedDropdown: true,
@@ -311,7 +307,7 @@ class _EditCategoryState extends State<EditCategory> {
                   },
                 ),
                 Text(
-                  'Featured Category',
+                  'Featured Brand',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -320,7 +316,7 @@ class _EditCategoryState extends State<EditCategory> {
             SizedBox(
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _updateCategory,
+                onPressed: _isLoading ? null : _updateBrand,
                 child: _isLoading
                     ? const SizedBox(
                         height: 32,
@@ -329,7 +325,7 @@ class _EditCategoryState extends State<EditCategory> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text('Update Category'),
+                    : const Text('Update Brand'),
               ),
             ),
           ],
