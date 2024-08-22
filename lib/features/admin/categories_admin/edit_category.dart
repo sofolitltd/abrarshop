@@ -59,7 +59,7 @@ class _EditCategoryState extends State<EditCategory> {
                 final picker = ImagePicker();
                 final pickedFile = await picker.pickImage(
                   source: ImageSource.gallery,
-                  imageQuality: 40,
+                  // imageQuality: 50,
                   maxWidth: 500,
                   maxHeight: 500,
                 );
@@ -80,7 +80,7 @@ class _EditCategoryState extends State<EditCategory> {
                 final picker = ImagePicker();
                 final pickedFile = await picker.pickImage(
                   source: ImageSource.camera,
-                  imageQuality: 40,
+                  imageQuality: 50,
                   maxWidth: 500,
                   maxHeight: 500,
                 );

@@ -77,7 +77,11 @@ class _EditProductState extends State<EditProduct> {
               onPressed: () async {
                 Navigator.pop(context);
                 final picker = ImagePicker();
-                final pickedFiles = await picker.pickMultiImage();
+                final pickedFiles = await picker.pickMultiImage(
+                  // imageQuality: 50,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
                 if (pickedFiles != null) {
                   setState(() {
                     _imageFiles = pickedFiles.map((x) => File(x.path)).toList();
@@ -93,8 +97,12 @@ class _EditProductState extends State<EditProduct> {
               onPressed: () async {
                 Navigator.pop(context);
                 final picker = ImagePicker();
-                final pickedFile =
-                    await picker.pickImage(source: ImageSource.camera);
+                final pickedFile = await picker.pickImage(
+                  source: ImageSource.camera,
+                  imageQuality: 50,
+                  maxWidth: 500,
+                  maxHeight: 500,
+                );
                 if (pickedFile != null) {
                   setState(() {
                     _imageFiles.add(File(pickedFile.path));

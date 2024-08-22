@@ -50,7 +50,7 @@ class _AddProductState extends State<AddProduct> {
                 Navigator.pop(context); // Close the dialog
                 final picker = ImagePicker();
                 final pickedFiles = await picker.pickMultiImage(
-                  imageQuality: 40,
+                  // imageQuality: 50,
                   maxWidth: 500,
                   maxHeight: 500,
                 );
@@ -71,7 +71,7 @@ class _AddProductState extends State<AddProduct> {
                 final picker = ImagePicker();
                 final pickedFile = await picker.pickImage(
                   source: ImageSource.camera,
-                  imageQuality: 40,
+                  imageQuality: 50,
                   maxWidth: 500,
                   maxHeight: 500,
                 );
