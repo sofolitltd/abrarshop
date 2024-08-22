@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/features/home/controllers/category_controller.dart';
-import '/features/home/models/category_model.dart';
 
 class EditBrand extends StatefulWidget {
   final BrandModel brand;
@@ -26,7 +25,6 @@ class _EditBrandState extends State<EditBrand> {
   final TextEditingController _nameController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String? _selectedParent;
   bool _isFeatured = false;
   bool _isLoading = false;
 
@@ -37,9 +35,7 @@ class _EditBrandState extends State<EditBrand> {
   void initState() {
     super.initState();
     _nameController.text = widget.brand.name;
-    if (widget.brand.parentId.isNotEmpty) {
-      _selectedParent = widget.brand.parentId;
-    }
+
     _isFeatured = widget.brand.isFeatured;
     _imageUrl = widget.brand.imageUrl;
   }
@@ -74,8 +70,13 @@ class _EditBrandState extends State<EditBrand> {
                   });
                 }
               },
-              child: const Text('Gallery'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Gallery'),
+              ),
             ),
+
+            //
             SimpleDialogOption(
               onPressed: () async {
                 Navigator.pop(context);
@@ -92,7 +93,10 @@ class _EditBrandState extends State<EditBrand> {
                   });
                 }
               },
-              child: const Text('Camera'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Camera'),
+              ),
             ),
           ],
         );
@@ -156,7 +160,6 @@ class _EditBrandState extends State<EditBrand> {
         name: _nameController.text.trim(),
         slug: slug,
         imageUrl: _imageUrl ?? widget.brand.imageUrl,
-        parentId: _selectedParent ?? '',
         isFeatured: _isFeatured,
         createdDate: Timestamp.now(),
       );
@@ -210,54 +213,6 @@ class _EditBrandState extends State<EditBrand> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
-            Obx(() {
-              List<CategoryModel> categories = categoryController.allCategories
-                  // .where((cat) => cat.name != widget.brand.parentId)
-                  .toList();
-              return ButtonTheme(
-                alignedDropdown: true,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: DropdownButton<String>(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 14, horizontal: 8),
-                          isDense: true,
-                          isExpanded: true,
-                          value: _selectedParent,
-                          hint: const Text('Parent Category'),
-                          items: categories.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.name,
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            _selectedParent = value;
-                            setState(() {});
-                          },
-                          underline: const SizedBox(),
-                        ),
-                      ),
-                    ),
-                    if (_selectedParent != null && _selectedParent!.isNotEmpty)
-                      IconButton(
-                        onPressed: () {
-                          _selectedParent = null;
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.clear),
-                      ),
-                  ],
-                ),
-              );
-            }),
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,

@@ -69,7 +69,10 @@ class _EditCategoryState extends State<EditCategory> {
                   });
                 }
               },
-              child: const Text('Gallery'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Gallery'),
+              ),
             ),
             SimpleDialogOption(
               onPressed: () async {
@@ -87,7 +90,10 @@ class _EditCategoryState extends State<EditCategory> {
                   });
                 }
               },
-              child: const Text('Camera'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Camera'),
+              ),
             ),
           ],
         );

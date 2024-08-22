@@ -5,7 +5,6 @@ class BrandModel {
   String name;
   String slug;
   String imageUrl;
-  String parentId;
   bool isFeatured;
   Timestamp createdDate;
 
@@ -14,7 +13,6 @@ class BrandModel {
     required this.name,
     required this.slug,
     required this.imageUrl,
-    required this.parentId,
     required this.isFeatured,
     required this.createdDate,
   });
@@ -25,7 +23,6 @@ class BrandModel {
         name: '',
         slug: '',
         imageUrl: '',
-        parentId: '',
         isFeatured: false,
         createdDate: Timestamp.now(),
       );
@@ -41,7 +38,6 @@ class BrandModel {
         name: data['name'] ?? '',
         slug: data['slug'] ?? '',
         imageUrl: data['imageUrl'] ?? '',
-        parentId: data['parentId'] ?? '',
         isFeatured: data['isFeatured'] ?? false,
         createdDate: data['createdDate'] ?? Timestamp,
       );
@@ -58,7 +54,6 @@ class BrandModel {
       name: data['name'] ?? '',
       slug: data['slug'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
-      parentId: data['parentId'] ?? '',
       isFeatured: data['isFeatured'] ?? false,
       createdDate: data['createdDate'] ?? Timestamp,
     );
@@ -71,7 +66,6 @@ class BrandModel {
       'name': name,
       'slug': slug,
       'imageUrl': imageUrl,
-      'parentId': parentId,
       'isFeatured': isFeatured,
       'createdDate': createdDate,
     };

@@ -49,227 +49,277 @@ class AllCategoriesAdmin extends StatelessWidget {
           }
 
           final docs = snapshot.data!.docs;
-          return Scrollbar(
-            scrollbarOrientation: ScrollbarOrientation.bottom,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Table(
-                  border: TableBorder.all(color: Colors.black12),
-                  defaultColumnWidth: const IntrinsicColumnWidth(),
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    const TableRow(
-                      decoration: BoxDecoration(
-                        color: Colors.black12,
-                      ),
-                      children: [
-                        //
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Image',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+          return Center(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Scrollbar(
+                scrollbarOrientation: ScrollbarOrientation.bottom,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Scrollbar(
+                    scrollbarOrientation: ScrollbarOrientation.right,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Table(
+                          border: TableBorder.all(color: Colors.black12),
+                          defaultColumnWidth: const IntrinsicColumnWidth(),
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          children: [
+                            const TableRow(
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
                               ),
-                            ),
-                          ),
-                        ),
-                        //name
-
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Name',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // parent category
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Parent Category',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // slug
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Slug',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // featured
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Featured',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // actions
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Actions',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    //
-                    for (var i = 0; i < docs.length; i++)
-                      TableRow(
-                        children: [
-                          //image
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  color: Colors.blueAccent.shade100
-                                      .withOpacity(.2),
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: docs[i]['imageUrl'].isNotEmpty
-                                      ? DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image:
-                                              NetworkImage(docs[i]['imageUrl']),
-                                        )
-                                      : null,
-                                ),
-                                // Assuming imageUrl is a valid image URL
-                              ),
-                            ),
-                          ),
-
-                          // name
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                docs[i]['name'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // parent
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(docs[i]['parentId'] ?? ''),
-                            ),
-                          ),
-
-                          //slug
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(docs[i]['slug']),
-                            ),
-                          ),
-
-                          // featured
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: docs[i]['isFeatured'] != true
-                                    ? const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.grey,
-                                      )
-                                    : const Icon(
-                                        Icons.favorite,
-                                        color: Colors.blueAccent,
+                              children: [
+                                //
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'No',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
-                              ),
-                            ),
-                          ),
-
-                          // action
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    style: IconButton.styleFrom(
-                                      visualDensity: const VisualDensity(
-                                        vertical: -3,
-                                        horizontal: -3,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      final category =
-                                          CategoryModel.fromQuerySnapshot(
-                                              docs[i]);
-                                      Get.to(() =>
-                                          EditCategory(category: category));
-                                    },
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.grey,
                                     ),
                                   ),
-                                  IconButton(
-                                    style: IconButton.styleFrom(
-                                      visualDensity: const VisualDensity(
-                                        vertical: -3,
-                                        horizontal: -3,
+                                ),
+
+                                //
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Image',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      showDeleteConfirmationDialog(
-                                          context, docs[i].id);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.red.shade400,
+                                  ),
+                                ),
+                                //name
+
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Name',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // parent category
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Parent Category',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // slug
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Slug',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // featured
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Featured',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // actions
+                                TableCell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Actions',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            //
+                            for (var i = 0; i < docs.length; i++)
+                              TableRow(
+                                children: [
+                                  //
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '${i + 1}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  //image
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black12),
+                                          color: Colors.blueAccent.shade100
+                                              .withOpacity(.2),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: docs[i]['imageUrl'].isNotEmpty
+                                              ? DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(
+                                                      docs[i]['imageUrl']),
+                                                )
+                                              : null,
+                                        ),
+                                        // Assuming imageUrl is a valid image URL
+                                      ),
+                                    ),
+                                  ),
+
+                                  // name
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        docs[i]['name'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  // parent
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(docs[i]['parentId'] ?? ''),
+                                    ),
+                                  ),
+
+                                  //slug
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(docs[i]['slug']),
+                                    ),
+                                  ),
+
+                                  // featured
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: docs[i]['isFeatured'] != true
+                                            ? const Icon(
+                                                Icons.favorite_border,
+                                                color: Colors.grey,
+                                              )
+                                            : const Icon(
+                                                Icons.favorite,
+                                                color: Colors.blueAccent,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  // action
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            style: IconButton.styleFrom(
+                                              visualDensity:
+                                                  const VisualDensity(
+                                                vertical: -3,
+                                                horizontal: -3,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              final category = CategoryModel
+                                                  .fromQuerySnapshot(docs[i]);
+                                              Get.to(() => EditCategory(
+                                                  category: category));
+                                            },
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            style: IconButton.styleFrom(
+                                              visualDensity:
+                                                  const VisualDensity(
+                                                vertical: -3,
+                                                horizontal: -3,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              showDeleteConfirmationDialog(
+                                                  context, docs[i].id);
+                                            },
+                                            icon: Icon(
+                                              Icons.delete,
+                                              color: Colors.red.shade400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                  ],
+                    ),
+                  ),
                 ),
               ),
             ),

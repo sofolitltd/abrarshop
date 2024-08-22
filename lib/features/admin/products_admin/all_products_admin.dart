@@ -53,320 +53,337 @@ class AllProductsAdmin extends StatelessWidget {
             scrollbarOrientation: ScrollbarOrientation.bottom,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Table(
-                  border: TableBorder.all(color: Colors.black12),
-                  defaultColumnWidth: const IntrinsicColumnWidth(),
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    const TableRow(
-                      decoration: BoxDecoration(
-                        color: Colors.black12,
-                      ),
+              child: Scrollbar(
+                scrollbarOrientation: ScrollbarOrientation.right,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Table(
+                      border: TableBorder.all(color: Colors.black12),
+                      defaultColumnWidth: const IntrinsicColumnWidth(),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
                       children: [
-                        // no
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'No',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                        const TableRow(
+                          decoration: BoxDecoration(
+                            color: Colors.black12,
+                          ),
+                          children: [
+                            // no
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'No',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+
+                            //
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Image',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // name
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Name',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            //  category
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Category',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // sub
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'SubCategory',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // brand
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Brand',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // stock
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Stock',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // price
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Price',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // featured
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Featured',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // actions
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    'Actions',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
 
                         //
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Image',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                        for (var i = 0; i < docs.length; i++)
+                          TableRow(
+                            children: [
+                              //no
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Text(
+                                    '${i + 1}',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // name
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Name',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // img
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black12),
+                                      color: Colors.blueAccent.shade100
+                                          .withOpacity(.2),
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: docs[i]['images'].isNotEmpty
+                                          ? DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  docs[i]['images'][0]),
+                                            )
+                                          : null,
+                                    ),
+                                    // Assuming imageUrl is a valid image URL
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        //  category
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Category',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // name
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    docs[i]['name'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // sub
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'SubCategory',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // category
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text((docs[i]['category'] != '')
+                                      ? '${docs[i]['category']}'
+                                      : '-'),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // brand
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Brand',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // sub
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text((docs[i]['subCategory'] != '')
+                                      ? '${docs[i]['subCategory']}'
+                                      : '--'),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // stock
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Stock',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // brand
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text((docs[i]['brand'] != '')
+                                      ? '${docs[i]['brand']}'
+                                      : '-'),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // price
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Price',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              //stock
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    docs[i]['stock'].toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // featured
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Featured',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              // price
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      docs[i]['salePrice'].toStringAsFixed(0)),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
 
-                        // actions
-                        TableCell(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                'Actions',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              //featured
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: docs[i]['isFeatured'] != true
+                                        ? const Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.grey,
+                                          )
+                                        : const Icon(
+                                            Icons.favorite,
+                                            color: Colors.blueAccent,
+                                          ),
+                                  ),
+                                ),
                               ),
-                            ),
+
+                              // action
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        style: IconButton.styleFrom(
+                                          visualDensity: const VisualDensity(
+                                            vertical: -3,
+                                            horizontal: -3,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          final product =
+                                              ProductModel.fromQuerySnapshot(
+                                                  docs[i]);
+                                          Get.to(() =>
+                                              EditProduct(product: product));
+                                        },
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        style: IconButton.styleFrom(
+                                          visualDensity: const VisualDensity(
+                                            vertical: -3,
+                                            horizontal: -3,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          showDeleteConfirmationDialog(
+                                              context, docs[i].id);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red.shade400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
                       ],
                     ),
-
-                    //
-                    for (var i = 0; i < docs.length; i++)
-                      TableRow(
-                        children: [
-                          //no
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: Text(
-                                '${i + 1}',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-
-                          // img
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  color: Colors.blueAccent.shade100
-                                      .withOpacity(.2),
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: docs[i]['images'].isNotEmpty
-                                      ? DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              docs[i]['images'][0]),
-                                        )
-                                      : null,
-                                ),
-                                // Assuming imageUrl is a valid image URL
-                              ),
-                            ),
-                          ),
-
-                          // name
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                docs[i]['name'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // category
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['category'] != '')
-                                  ? '${docs[i]['category']}'
-                                  : '-'),
-                            ),
-                          ),
-
-                          // sub
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['subCategory'] != '')
-                                  ? '${docs[i]['subCategory']}'
-                                  : '--'),
-                            ),
-                          ),
-
-                          // brand
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text((docs[i]['brand'] != '')
-                                  ? '${docs[i]['brand']}'
-                                  : '-'),
-                            ),
-                          ),
-
-                          //stock
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                docs[i]['stock'].toString(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-
-                          // price
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Text(docs[i]['salePrice'].toStringAsFixed(0)),
-                            ),
-                          ),
-
-                          //featured
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: docs[i]['isFeatured'] != true
-                                    ? const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.grey,
-                                      )
-                                    : const Icon(
-                                        Icons.favorite,
-                                        color: Colors.blueAccent,
-                                      ),
-                              ),
-                            ),
-                          ),
-
-                          // action
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    style: IconButton.styleFrom(
-                                      visualDensity: const VisualDensity(
-                                        vertical: -3,
-                                        horizontal: -3,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      final product =
-                                          ProductModel.fromQuerySnapshot(
-                                              docs[i]);
-                                      Get.to(
-                                          () => EditProduct(product: product));
-                                    },
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    style: IconButton.styleFrom(
-                                      visualDensity: const VisualDensity(
-                                        vertical: -3,
-                                        horizontal: -3,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      showDeleteConfirmationDialog(
-                                          context, docs[i].id);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.red.shade400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
+                  ),
                 ),
               ),
             ),

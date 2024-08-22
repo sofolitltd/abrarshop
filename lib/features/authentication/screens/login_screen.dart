@@ -1,3 +1,4 @@
+import 'package:abrar_shop/features/authentication/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,8 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
           //
           NavigatorController navigatorController =
               Get.find<NavigatorController>();
+          UserController userController = Get.find<UserController>();
           if (route == '/profile') {
             // Set the selected index to 0 (Home)
+            userController.fetchUser();
             (Get.offAllNamed('/menu'));
             navigatorController.selectedIndex.value = 3;
           } else {

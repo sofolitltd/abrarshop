@@ -60,7 +60,10 @@ class _AddProductState extends State<AddProduct> {
                   });
                 }
               },
-              child: const Text('Gallery'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Gallery'),
+              ),
             ),
             SimpleDialogOption(
               onPressed: () async {
@@ -78,7 +81,10 @@ class _AddProductState extends State<AddProduct> {
                   });
                 }
               },
-              child: const Text('Camera'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Camera'),
+              ),
             ),
           ],
         );
@@ -378,8 +384,7 @@ class _AddProductState extends State<AddProduct> {
                 ],
 
                 // brand
-                if (_selectedCategory != null ||
-                    _selectedSubCategory != null) ...[
+                ...[
                   const SizedBox(height: 16),
                   Obx(
                     () {
@@ -403,12 +408,7 @@ class _AddProductState extends State<AddProduct> {
                                   isExpanded: true,
                                   value: _selectedBrand,
                                   hint: const Text('Brand'),
-                                  items: brandController.allBrands
-                                      .where((brand) =>
-                                          brand.parentId == _selectedCategory ||
-                                          brand.parentId ==
-                                              _selectedSubCategory) // Compare with parent ID
-                                      .map((brand) {
+                                  items: brandController.allBrands.map((brand) {
                                     return DropdownMenuItem<String>(
                                       value: brand.name,
                                       // Use the category ID for value

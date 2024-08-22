@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:abrar_shop/features/home/controllers/category_controller.dart';
-import 'package:abrar_shop/features/home/models/category_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ class _AddBrandState extends State<AddBrand> {
   final TextEditingController _nameController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String? _selectedParent;
   bool _isFeatured = false;
 
   bool _isLoading = false;
@@ -60,8 +58,13 @@ class _AddBrandState extends State<AddBrand> {
                   });
                 }
               },
-              child: const Text('Gallery'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Gallery'),
+              ),
             ),
+
+            //
             SimpleDialogOption(
               onPressed: () async {
                 Navigator.pop(context); // Close the dialog
@@ -78,7 +81,10 @@ class _AddBrandState extends State<AddBrand> {
                   });
                 }
               },
-              child: const Text('Camera'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Camera'),
+              ),
             ),
           ],
         );
@@ -121,8 +127,6 @@ class _AddBrandState extends State<AddBrand> {
         name: _nameController.text.trim(),
         slug: slug,
         imageUrl: _imageUrl ?? '',
-        // Add your logic for image URL
-        parentId: _selectedParent ?? '',
         isFeatured: _isFeatured,
         createdDate: Timestamp.now(),
       );
@@ -162,59 +166,6 @@ class _AddBrandState extends State<AddBrand> {
                 border: OutlineInputBorder(),
               ),
             ),
-
-            const SizedBox(height: 16),
-
-            //
-            Obx(() {
-              List<CategoryModel> brands = categoryController.allCategories;
-              return ButtonTheme(
-                alignedDropdown: true,
-                child: Row(
-                  // Wrap DropdownButton and IconButton in a Row
-                  children: [
-                    Expanded(
-                      // Allow DropdownButton to take available space
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: DropdownButton<String>(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 14, horizontal: 8),
-                          // Add horizontal padding
-                          isDense: true,
-                          isExpanded: true,
-                          value: _selectedParent,
-                          hint: const Text('Parent Category'),
-                          items: brands.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.name,
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            _selectedParent = value;
-                            setState(() {});
-                          },
-                          underline: const SizedBox(),
-                        ),
-                      ),
-                    ),
-                    if (_selectedParent != null)
-                      IconButton(
-                        // Add clear icon button
-                        onPressed: () {
-                          _selectedParent = null; // Clear the selection
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.clear),
-                      ),
-                  ],
-                ),
-              );
-            }),
 
             //
             const SizedBox(height: 16),

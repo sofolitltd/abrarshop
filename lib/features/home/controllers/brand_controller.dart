@@ -114,14 +114,8 @@ class BrandController extends GetxController {
       allBrands.assignAll(brands);
 
       //
-      allMainBrands.assignAll(
-          brands.where((category) => category.parentId.isEmpty).toList());
-
-      //
-      featuredBrands.assignAll(brands
-          .where((brand) => brand.isFeatured && brand.parentId.isEmpty)
-          .take(8)
-          .toList());
+      featuredBrands.assignAll(
+          brands.where((brand) => brand.isFeatured).take(8).toList());
 
       //
     } catch (e) {

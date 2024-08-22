@@ -60,7 +60,10 @@ class _AddCategoryState extends State<AddCategory> {
                   });
                 }
               },
-              child: const Text('Gallery'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Gallery'),
+              ),
             ),
             SimpleDialogOption(
               onPressed: () async {
@@ -78,7 +81,10 @@ class _AddCategoryState extends State<AddCategory> {
                   });
                 }
               },
-              child: const Text('Camera'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Camera'),
+              ),
             ),
           ],
         );
