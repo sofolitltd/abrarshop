@@ -22,7 +22,8 @@ class Search extends StatelessWidget {
         titleSpacing: 0,
         title: const Text('Search '),
       ),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // search
           Padding(
@@ -191,7 +192,7 @@ class Search extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'Products',
+              'All Products',
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -200,146 +201,154 @@ class Search extends StatelessWidget {
           ),
 
           // list
-          ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: productList.length,
-            shrinkWrap: true,
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              ProductModel productModel = productList[index];
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: productList.length,
+              shrinkWrap: true,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                ProductModel product = productList[index];
 
-              //
-              return GestureDetector(
-                onTap: () {
-                  //
-                },
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
+                //
+                return GestureDetector(
+                  onTap: () {
                     //
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.black12),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductsDetails(product: product),
                       ),
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          // image
-                          Container(
-                            width: 64,
-                            height: 64,
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: Colors.black12),
-                              image: productModel.images.isEmpty
-                                  ? null
-                                  : DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                        productModel.images[0],
+                    );
+                  },
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      //
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.black12),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            // image
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent.withOpacity(.5),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: Colors.black12),
+                                image: product.images.isEmpty
+                                    ? null
+                                    : DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                          product.images[0],
+                                        ),
                                       ),
-                                    ),
+                              ),
                             ),
-                          ),
 
-                          const SizedBox(width: 12),
+                            const SizedBox(width: 12),
 
-                          //
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                //
-                                Text(
-                                  '${productModel.name} ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(),
-                                ),
+                            //
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  //
+                                  Text(
+                                    '${product.name} ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(),
+                                  ),
 
-                                const SizedBox(height: 10),
+                                  const SizedBox(height: 10),
 
-                                Row(
-                                  children: [
-                                    //
-                                    Text(
-                                      '$kTkSymbol ${productModel.salePrice.toStringAsFixed(0)}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                            color: Colors.red,
-                                            fontSize: 20,
-                                            height: 1,
-                                          ),
-                                    ),
+                                  Row(
+                                    children: [
+                                      //
+                                      Text(
+                                        '$kTkSymbol ${product.salePrice.toStringAsFixed(0)}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                              color: Colors.red,
+                                              fontSize: 20,
+                                              height: 1,
+                                            ),
+                                      ),
 
-                                    const SizedBox(width: 16),
+                                      const SizedBox(width: 16),
 
-                                    //
-                                    // Text.rich(
-                                    //   TextSpan(
-                                    //       text: 'Sale: ',
-                                    //       children: [
-                                    //         TextSpan(
-                                    //           text:
-                                    //               '${productModel.salePrice.toStringAsFixed(0)} $kTkSymbol',
-                                    //           style: Theme.of(
-                                    //                   context)
-                                    //               .textTheme
-                                    //               .titleSmall!
-                                    //               .copyWith(
-                                    //                 fontSize:
-                                    //                     20,
-                                    //                 height: 1,
-                                    //               ),
-                                    //         ),
-                                    //       ]),
-                                    // ),
-                                  ],
-                                ),
-                              ],
+                                      //
+                                      // Text.rich(
+                                      //   TextSpan(
+                                      //       text: 'Sale: ',
+                                      //       children: [
+                                      //         TextSpan(
+                                      //           text:
+                                      //               '${product.salePrice.toStringAsFixed(0)} $kTkSymbol',
+                                      //           style: Theme.of(
+                                      //                   context)
+                                      //               .textTheme
+                                      //               .titleSmall!
+                                      //               .copyWith(
+                                      //                 fontSize:
+                                      //                     20,
+                                      //                 height: 1,
+                                      //               ),
+                                      //         ),
+                                      //       ]),
+                                      // ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
-                    //
-                    // IconButton(
-                    //     onPressed: () async {
-                    //       //
-                    //
-                    //       await showDeleteDialog(
-                    //           context: context,
-                    //           id: productModel.id,
-                    //           collectionName: 'products');
-                    //
-                    //       //
-                    //       for (int i = 0;
-                    //           i < productModel.images.length;
-                    //           i++) {
-                    //         await FirebaseStorage.instance
-                    //             .refFromURL(
-                    //                 productModel.images[i])
-                    //             .delete()
-                    //             .then((val) {
-                    //           print('Delete images');
-                    //         });
-                    //       }
-                    //     },
-                    //     icon: const Icon(
-                    //       Icons.delete_outline,
-                    //       size: 20,
-                    //     )),
-                  ],
-                ),
-              );
-            },
+                      //
+                      // IconButton(
+                      //     onPressed: () async {
+                      //       //
+                      //
+                      //       await showDeleteDialog(
+                      //           context: context,
+                      //           id: product.id,
+                      //           collectionName: 'products');
+                      //
+                      //       //
+                      //       for (int i = 0;
+                      //           i < product.images.length;
+                      //           i++) {
+                      //         await FirebaseStorage.instance
+                      //             .refFromURL(
+                      //                 product.images[i])
+                      //             .delete()
+                      //             .then((val) {
+                      //           print('Delete images');
+                      //         });
+                      //       }
+                      //     },
+                      //     icon: const Icon(
+                      //       Icons.delete_outline,
+                      //       size: 20,
+                      //     )),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '/features/home/models/product_model.dart';
 import '/utils/constants/constants.dart';
+import '../../../../utils/custom_text.dart';
 import '../../controllers/cart_controller.dart';
 import '../cart/cart.dart';
 import '../widgets/image_section.dart';
@@ -24,19 +25,13 @@ class ProductsDetails extends StatelessWidget {
 
     //
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        surfaceTintColor: Colors.transparent,
-        title: IconButton.filledTonal(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Iconsax.arrow_left,
-            size: 22,
-          ),
+        titleSpacing: 0,
+        centerTitle: true,
+        title: KText(
+          product.name,
+          style: const TextStyle(fontSize: 16),
         ),
         actions: [
           Stack(
@@ -83,7 +78,7 @@ class ProductsDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  KText(
                     product.name,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
@@ -210,14 +205,18 @@ class ProductsDetails extends StatelessWidget {
                                     const SizedBox(width: 8),
 
                                     Text(
-                                      'In Stock',
+                                      product.stock != 0
+                                          ? '${product.stock}'
+                                          : 'Out of Stock',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.bold,
                                             height: 1,
-                                            color: Colors.green,
+                                            color: product.stock != 0
+                                                ? Colors.green
+                                                : Colors.red,
                                           ),
                                     ),
                                   ],
@@ -230,7 +229,7 @@ class ProductsDetails extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   //
                   Text(
@@ -244,7 +243,7 @@ class ProductsDetails extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   //
-                  Text(
+                  KText(
                     product.description.isEmpty
                         ? '${product.name}, Special Price: ${product.salePrice.toStringAsFixed(0)}, Regular Price: ${product.regularPrice.toStringAsFixed(0)}'
                         : product.description,

@@ -6,6 +6,7 @@ import '/features/home/controllers/product_controller.dart';
 import '/features/home/screens/products/products_details.dart';
 import '/utils/constants/constants.dart';
 import '/utils/shimmer/popular_product_shimmer.dart';
+import '../../../../utils/custom_text.dart';
 import '../../controllers/cart_controller.dart';
 import '../../models/cart_model.dart';
 import '../cart/cart.dart';
@@ -208,11 +209,8 @@ class AllProducts extends StatelessWidget {
                                     //
                                     SizedBox(
                                       height: 40,
-                                      child: Text(
+                                      child: KText(
                                         product.name,
-                                        textAlign: TextAlign.start,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium!

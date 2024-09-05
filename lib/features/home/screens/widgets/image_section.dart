@@ -15,14 +15,17 @@ class _ImageSectionState extends State<ImageSection> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 400,
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           //
           Container(
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
               color: Colors.blueAccent.shade100.withOpacity(.5),
               image: widget.images.isNotEmpty
                   ? DecorationImage(

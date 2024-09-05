@@ -25,13 +25,23 @@ dependencies:
   fluttertoast: ^8.2.8
 
   image_picker: ^1.1.2
+  image_cropper: ^8.0.2
+  path_provider: ^2.1.4
+  image: ^4.2.0
+#  tflite: ^1.1.2
+  tflite_v2: ^1.0.0
+  file_picker: ^8.0.7
+  reorderables: ^0.6.0
+  flutter_dropzone: ^4.0.2
+#  tflite_flutter: ^0.10.4
+
+
 
 #------ dev ---------
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-
 
 flutter:
   uses-material-design: true
@@ -40,7 +50,7 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/images/
-    - assets/logos/
+    - assets/
 
 
   fonts:
@@ -52,6 +62,9 @@ flutter:
         weight: 500
       - asset: assets/fonts/Telenor-Bold.ttf
         weight: 800
+    - family: HindSiliguri
+      fonts:
+      - asset: assets/fonts/HindSiliguri-Regular.ttf
 
   
   

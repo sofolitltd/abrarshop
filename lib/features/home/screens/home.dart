@@ -1,3 +1,4 @@
+import 'package:abrar_shop/features/home/screens/image_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -54,6 +55,22 @@ class Home extends StatelessWidget {
               ]),
         ),
         actions: [
+          //
+          IconButton.filledTonal(
+            onPressed: () {
+              Get.to(
+                // () => const ImageEditor(),
+                () => ImageRow(),
+                transition: Transition.rightToLeft,
+              );
+            },
+            icon: const Icon(
+              Iconsax.image,
+              size: 22,
+            ),
+          ),
+
+          //
           Stack(
             alignment: Alignment.topRight,
             children: [
